@@ -58,8 +58,6 @@ function formatNextScheduledTime(): string {
     (next.getDate() !== now.getDate() ? ' (tomorrow)' : ' (today)');
 }
 
-import { getActiveScheduledStream, DAILY_SCHEDULE } from '@/config/schedule';
-
 export function AudioProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -73,7 +71,6 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   });
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
   const [isLiveStreamActive, setIsLiveStreamActive] = useState(false);
-  const [fallbackIndex, setFallbackIndex] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -161,35 +158,17 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       targetTrack = MORNING_TRACKS[1];
       timeUntilNextEventMs = (totalScheduledDuration - elapsedSeconds) * 1000;
     } else {
-      // Outside local MP3 scheduled block
-      // Let's check the dynamic 24/7 internet radio schedule
-      // Pass fallbackIndex so that if an error occurs, it jumps to the next GROUP/Category!
-      const activeStream = getActiveScheduledStream(now, fallbackIndex);
-
-      if (activeStream) {
-        targetSrc = activeStream.streamUrl;
-        targetOffset = 0;
-        targetMode = 'live'; // Treat internet radio as live
-        targetTrack = {
-          title: `${activeStream.genre} - ${activeStream.stationName}`,
-          artist: activeStream.artist,
-          cover: '/bg.jpg',
-        };
-        // Re-evaluate when this slot ends
-        const slotEndTime = new Date(now);
-        slotEndTime.setHours(activeStream.endHour, activeStream.endMinute, 0, 0);
-        if (slotEndTime.getTime() <= now.getTime()) {
-          slotEndTime.setDate(slotEndTime.getDate() + 1); // Edge case for midnight crossover
-        }
-        timeUntilNextEventMs = slotEndTime.getTime() - now.getTime();
-      } else {
-        // Fallback if no schedule matched (shouldn't happen with 24/7 coverage, but just in case)
-        targetSrc = streamUrl;
-        targetOffset = 0;
-        targetMode = 'live';
-        targetTrack = null;
-        timeUntilNextEventMs = 60000; // Check every minute
+      // Outside scheduled block -> Live stream
+      targetSrc = streamUrl;
+      targetOffset = 0;
+      targetMode = 'live';
+      
+      // Calculate time until next 4:30 AM
+      const nextSchedule = new Date(scheduledTime);
+      if (elapsedSeconds >= 0) {
+        nextSchedule.setDate(nextSchedule.getDate() + 1);
       }
+      timeUntilNextEventMs = nextSchedule.getTime() - now.getTime();
     }
 
     if (!targetSrc) return; // streamUrl not loaded yet
@@ -201,20 +180,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       setCurrentTrack({ title: targetTrack.title, artist: targetTrack.artist, cover: targetTrack.cover });
     }
 
-    // Prevent infinite fallback loops
-    if (fallbackIndex > DAILY_SCHEDULE.length * 2) {
-      console.error("All fallback streams failed! Stopping playback.");
-      setLoading(false);
-      setIsPlaying(false);
-      setCurrentTrack({ title: "Broadcast Offline", artist: "Please try again later", cover: "/bg.jpg" });
-      return;
-    }
-
     // Update audio element if source changed or if we need to force play
-    const currentSrcUrl = audioRef.current.src || '';
-    const targetSrcUrl = new URL(targetSrc, window.location.origin).href;
+    const currentSrcPath = new URL(audioRef.current.src || 'http://localhost').pathname;
+    const targetSrcPath = new URL(targetSrc, window.location.origin).pathname;
 
-    if (currentSrcUrl !== targetSrcUrl || isInitialPlay) {
+    if (currentSrcPath !== targetSrcPath || isInitialPlay) {
       setLoading(true);
       audioRef.current.src = targetSrc;
       audioRef.current.load();
@@ -229,44 +199,23 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       }
       
       if (isPlaying || isInitialPlay) {
-        // Start a 10 second timeout for the stream to start playing
-        // If it hangs (like some Icecast servers do), we force a fallback
-        const loadTimer = setTimeout(() => {
-          console.warn("Stream taking too long to load, forcing fallback...");
-          handleAudioError();
-        }, 10000);
-
-        // Store the timer on the audio element so we can clear it on success
-        (audioRef.current as any)._loadTimer = loadTimer;
-
-        audioRef.current.play()
-          .then(() => {
-             setIsPlaying(true);
-          })
-          .catch((e) => {
-            console.error("Play promise rejected:", e);
-            clearTimeout(loadTimer);
-            handleAudioError();
-          });
+        audioRef.current.play().catch((e) => {
+          console.error(e);
+          setLoading(false);
+        });
+        setIsPlaying(true);
       }
     }
 
     // Schedule the next evaluation
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
-      setFallbackIndex(0); // Reset fallback index for the new slot
       evaluateAndPlay();
     }, timeUntilNextEventMs);
 
-  }, [streamUrl, isPlaying, isLiveStreamActive, fallbackIndex]);
+  }, [streamUrl, isPlaying, isLiveStreamActive]);
 
-  // Clear load timer when audio actually starts playing
-  const handleCanPlay = () => {
-    setLoading(false);
-    if (audioRef.current && (audioRef.current as any)._loadTimer) {
-      clearTimeout((audioRef.current as any)._loadTimer);
-    }
-  };
+  // Evaluate state when streamUrl loads, isLiveStreamActive changes, or periodically to catch boundaries
   useEffect(() => {
     if (streamUrl) evaluateAndPlay();
     return () => {
@@ -283,16 +232,9 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     } else {
       setLoading(true);
-      setFallbackIndex(0); // Reset fallback index when manually playing
       // Force an evaluation to ensure we jump to the correct pseudo-live timestamp
       evaluateAndPlay(true);
     }
-  };
-
-  const handleAudioError = () => {
-    console.warn("Audio stream failed to load, trying next fallback...");
-    setLoading(true);
-    setFallbackIndex(prev => prev + 1);
   };
 
   return (
@@ -313,10 +255,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       <audio 
         ref={audioRef} 
         preload="none" 
+        crossOrigin="anonymous" 
         onWaiting={() => setLoading(true)}
-        onPlaying={handleCanPlay}
-        onCanPlay={handleCanPlay}
-        onError={handleAudioError}
+        onPlaying={() => setLoading(false)}
+        onCanPlay={() => setLoading(false)}
+        onError={() => setLoading(false)}
       />
       {children}
     </AudioContext.Provider>
