@@ -26,7 +26,13 @@ export async function GET() {
     controller.abort();
 
     if (res.ok) {
-      return NextResponse.json({ isLive: true });
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('audio') || contentType.includes('ogg')) {
+        return NextResponse.json({ isLive: true });
+      } else {
+        // Probably a Cloudflare HTML error page
+        return NextResponse.json({ isLive: false });
+      }
     } else {
       return NextResponse.json({ isLive: false });
     }
