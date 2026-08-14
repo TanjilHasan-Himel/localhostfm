@@ -200,10 +200,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     }
 
     // Update audio element if source changed or if we need to force play
-    const currentSrcPath = new URL(audioRef.current.src || 'http://localhost').pathname;
-    const targetSrcPath = new URL(targetSrc, window.location.origin).pathname;
+    // Compare full URLs to support external internet radio streams correctly
+    const currentSrcUrl = audioRef.current.src || '';
+    const targetSrcUrl = new URL(targetSrc, window.location.origin).href;
 
-    if (currentSrcPath !== targetSrcPath || isInitialPlay) {
+    if (currentSrcUrl !== targetSrcUrl || isInitialPlay) {
       setLoading(true);
       audioRef.current.src = targetSrc;
       audioRef.current.load();
@@ -274,7 +275,6 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       <audio 
         ref={audioRef} 
         preload="none" 
-        crossOrigin="anonymous" 
         onWaiting={() => setLoading(true)}
         onPlaying={() => setLoading(false)}
         onCanPlay={() => setLoading(false)}
