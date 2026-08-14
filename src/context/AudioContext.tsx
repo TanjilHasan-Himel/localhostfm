@@ -58,6 +58,8 @@ function formatNextScheduledTime(): string {
     (next.getDate() !== now.getDate() ? ' (tomorrow)' : ' (today)');
 }
 
+import { getActiveScheduledStream } from '@/config/schedule';
+
 export function AudioProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -158,17 +160,34 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       targetTrack = MORNING_TRACKS[1];
       timeUntilNextEventMs = (totalScheduledDuration - elapsedSeconds) * 1000;
     } else {
-      // Outside scheduled block -> Live stream
-      targetSrc = streamUrl;
-      targetOffset = 0;
-      targetMode = 'live';
-      
-      // Calculate time until next 4:30 AM
-      const nextSchedule = new Date(scheduledTime);
-      if (elapsedSeconds >= 0) {
-        nextSchedule.setDate(nextSchedule.getDate() + 1);
+      // Outside local MP3 scheduled block
+      // Let's check the dynamic 24/7 internet radio schedule
+      const activeSlot = getActiveScheduledStream(now);
+
+      if (activeSlot) {
+        targetSrc = activeSlot.streamUrl;
+        targetOffset = 0;
+        targetMode = 'live'; // Treat internet radio as live
+        targetTrack = {
+          title: activeSlot.genre,
+          artist: activeSlot.artist,
+          cover: '/bg.jpg',
+        };
+        // Re-evaluate when this slot ends
+        const slotEndTime = new Date(now);
+        slotEndTime.setHours(activeSlot.endHour, activeSlot.endMinute, 0, 0);
+        if (slotEndTime.getTime() <= now.getTime()) {
+          slotEndTime.setDate(slotEndTime.getDate() + 1); // Edge case for midnight crossover
+        }
+        timeUntilNextEventMs = slotEndTime.getTime() - now.getTime();
+      } else {
+        // Fallback if no schedule matched (shouldn't happen with 24/7 coverage, but just in case)
+        targetSrc = streamUrl;
+        targetOffset = 0;
+        targetMode = 'live';
+        targetTrack = null;
+        timeUntilNextEventMs = 60000; // Check every minute
       }
-      timeUntilNextEventMs = nextSchedule.getTime() - now.getTime();
     }
 
     if (!targetSrc) return; // streamUrl not loaded yet
