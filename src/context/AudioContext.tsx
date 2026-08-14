@@ -201,8 +201,16 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       setCurrentTrack({ title: targetTrack.title, artist: targetTrack.artist, cover: targetTrack.cover });
     }
 
+    // Prevent infinite fallback loops
+    if (fallbackIndex > DAILY_SCHEDULE.length * 2) {
+      console.error("All fallback streams failed! Stopping playback.");
+      setLoading(false);
+      setIsPlaying(false);
+      setCurrentTrack({ title: "Broadcast Offline", artist: "Please try again later", cover: "/bg.jpg" });
+      return;
+    }
+
     // Update audio element if source changed or if we need to force play
-    // Compare full URLs to support external internet radio streams correctly
     const currentSrcUrl = audioRef.current.src || '';
     const targetSrcUrl = new URL(targetSrc, window.location.origin).href;
 
@@ -221,11 +229,25 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       }
       
       if (isPlaying || isInitialPlay) {
-        audioRef.current.play().catch((e) => {
-          console.error(e);
-          setLoading(false);
-        });
-        setIsPlaying(true);
+        // Start a 10 second timeout for the stream to start playing
+        // If it hangs (like some Icecast servers do), we force a fallback
+        const loadTimer = setTimeout(() => {
+          console.warn("Stream taking too long to load, forcing fallback...");
+          handleAudioError();
+        }, 10000);
+
+        // Store the timer on the audio element so we can clear it on success
+        (audioRef.current as any)._loadTimer = loadTimer;
+
+        audioRef.current.play()
+          .then(() => {
+             setIsPlaying(true);
+          })
+          .catch((e) => {
+            console.error("Play promise rejected:", e);
+            clearTimeout(loadTimer);
+            handleAudioError();
+          });
       }
     }
 
@@ -238,7 +260,13 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
   }, [streamUrl, isPlaying, isLiveStreamActive, fallbackIndex]);
 
-  // Evaluate state when streamUrl loads, isLiveStreamActive changes, or periodically to catch boundaries
+  // Clear load timer when audio actually starts playing
+  const handleCanPlay = () => {
+    setLoading(false);
+    if (audioRef.current && (audioRef.current as any)._loadTimer) {
+      clearTimeout((audioRef.current as any)._loadTimer);
+    }
+  };
   useEffect(() => {
     if (streamUrl) evaluateAndPlay();
     return () => {
@@ -286,8 +314,8 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         ref={audioRef} 
         preload="none" 
         onWaiting={() => setLoading(true)}
-        onPlaying={() => setLoading(false)}
-        onCanPlay={() => setLoading(false)}
+        onPlaying={handleCanPlay}
+        onCanPlay={handleCanPlay}
         onError={handleAudioError}
       />
       {children}
