@@ -163,28 +163,21 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     } else {
       // Outside local MP3 scheduled block
       // Let's check the dynamic 24/7 internet radio schedule
-      const activeSlot = getActiveScheduledStream(now);
+      // Pass fallbackIndex so that if an error occurs, it jumps to the next GROUP/Category!
+      const activeStream = getActiveScheduledStream(now, fallbackIndex);
 
-      if (activeSlot && activeSlot.streams.length > 0) {
-        // Base logic for alternating days
-        const dayOfWeek = now.getDay();
-        const baseIndex = dayOfWeek % activeSlot.streams.length;
-        
-        // Include fallback index in case of errors
-        const actualIndex = (baseIndex + fallbackIndex) % activeSlot.streams.length;
-        const selectedStream = activeSlot.streams[actualIndex];
-
-        targetSrc = selectedStream.url;
+      if (activeStream) {
+        targetSrc = activeStream.streamUrl;
         targetOffset = 0;
         targetMode = 'live'; // Treat internet radio as live
         targetTrack = {
-          title: `${activeSlot.genre} - ${selectedStream.stationName}`,
-          artist: activeSlot.artist,
+          title: `${activeStream.genre} - ${activeStream.stationName}`,
+          artist: activeStream.artist,
           cover: '/bg.jpg',
         };
         // Re-evaluate when this slot ends
         const slotEndTime = new Date(now);
-        slotEndTime.setHours(activeSlot.endHour, activeSlot.endMinute, 0, 0);
+        slotEndTime.setHours(activeStream.endHour, activeStream.endMinute, 0, 0);
         if (slotEndTime.getTime() <= now.getTime()) {
           slotEndTime.setDate(slotEndTime.getDate() + 1); // Edge case for midnight crossover
         }

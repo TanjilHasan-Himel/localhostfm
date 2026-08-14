@@ -189,18 +189,44 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
   }
 ];
 
-export function getActiveScheduledStream(now: Date): ScheduleSlot | null {
+export function getActiveScheduledStream(now: Date, errorCount: number = 0): ActiveStream | null {
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
   const currentTimeInMinutes = currentHour * 60 + currentMinute;
+  const dayOfWeek = now.getDay(); // 0 (Sun) to 6 (Sat)
 
-  for (const slot of DAILY_SCHEDULE) {
+  let baseSlotIndex = -1;
+
+  for (let i = 0; i < DAILY_SCHEDULE.length; i++) {
+    const slot = DAILY_SCHEDULE[i];
     const startTimeInMinutes = slot.startHour * 60 + slot.startMinute;
     const endTimeInMinutes = slot.endHour * 60 + slot.endMinute;
 
     if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes < endTimeInMinutes) {
-      return slot;
+      baseSlotIndex = i;
+      break;
     }
   }
-  return null;
+
+  if (baseSlotIndex === -1) return null;
+
+  // If errorCount > 0, we jump to the next group/category entirely!
+  // This ensures that if a category is fully blocked, we play another category to cover the time.
+  const actualSlotIndex = (baseSlotIndex + errorCount) % DAILY_SCHEDULE.length;
+  const activeSlot = DAILY_SCHEDULE[actualSlotIndex];
+
+  if (!activeSlot || activeSlot.streams.length === 0) return null;
+
+  // Pick a stream based on the day of the week
+  const streamIndex = dayOfWeek % activeSlot.streams.length;
+  const selectedStream = activeSlot.streams[streamIndex];
+
+  return {
+    genre: activeSlot.genre,
+    artist: activeSlot.artist,
+    streamUrl: selectedStream.url,
+    stationName: selectedStream.stationName,
+    endHour: activeSlot.endHour,
+    endMinute: activeSlot.endMinute
+  };
 }
