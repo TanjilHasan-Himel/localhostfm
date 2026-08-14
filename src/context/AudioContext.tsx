@@ -169,7 +169,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         targetOffset = 0;
         targetMode = 'live'; // Treat internet radio as live
         targetTrack = {
-          title: activeSlot.genre,
+          title: `${activeSlot.genre} - ${activeSlot.stationName}`,
           artist: activeSlot.artist,
           cover: '/bg.jpg',
         };
