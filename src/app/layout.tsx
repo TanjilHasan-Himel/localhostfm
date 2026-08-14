@@ -13,8 +13,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Localhost FM | Lo-fi Beats",
-  description: "A modern Next.js-based web radio platform.",
+  title: "tdoubleh fm",
+  description: "Welcome to T Double H FM, the ultimate live radio station curated by Tanjil Hasan Himel. Enjoy 24/7 lofi beats, morning routines, and live broadcasts.",
+  authors: [{ name: "Tanjil Hasan Himel" }],
+  keywords: ["radio", "T Double H FM", "lofi", "live stream", "Tanjil Hasan Himel", "music", "broadcast"],
+  openGraph: {
+    title: "T Double H FM | Live 24/7 Radio",
+    description: "Welcome to T Double H FM, the ultimate live radio station curated by Tanjil Hasan Himel. Enjoy 24/7 lofi beats, morning routines, and live broadcasts.",
+    url: "https://tdoubleh.fm",
+    siteName: "T Double H FM",
+    images: [
+      {
+        url: "/bg.jpg",
+        width: 1200,
+        height: 630,
+        alt: "T Double H FM Cover",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "T Double H FM | Live 24/7 Radio",
+    description: "Welcome to T Double H FM, curated by Tanjil Hasan Himel.",
+    images: ["/bg.jpg"],
+  },
 };
 
 import { AudioProvider } from "@/context/AudioContext";

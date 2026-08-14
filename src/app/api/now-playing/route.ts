@@ -9,7 +9,7 @@ export async function GET() {
   // Dummy response
   const currentTrack = {
     title: 'Midnight Coding Sessions',
-    artist: 'Localhost FM Chill',
+    artist: 'T Double H FM Chill',
     cover: '/bg.jpg', // Using the background image as the dummy cover art
   };
 

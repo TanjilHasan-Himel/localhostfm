@@ -17,11 +17,7 @@ export async function GET() {
 
   // Validate it's a legitimate URL before returning (prevents env poisoning)
   try {
-    const parsed = new URL(streamUrl);
-    // Only allow https streams
-    if (parsed.protocol !== 'https:') {
-      return NextResponse.json({ error: 'Invalid stream protocol' }, { status: 400 });
-    }
+    new URL(streamUrl);
   } catch {
     return NextResponse.json({ error: 'Invalid stream URL configured' }, { status: 500 });
   }

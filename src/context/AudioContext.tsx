@@ -37,7 +37,7 @@ const MORNING_TRACKS = [
   {
     src: '/audio/morning2.mp3',
     title: 'Morning Routine',
-    artist: 'Localhost FM',
+    artist: 'T Double H FM',
     cover: '/bg.jpg',
     durationSec: 8613, // 2h 23m 33s
   },
@@ -68,9 +68,32 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     cover: '/bg.jpg',
   });
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
+  const [isLiveStreamActive, setIsLiveStreamActive] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ─── Generic Live Stream Detection ─────────────────────────────────────────
+  // Polls our own backend every 10 seconds to see if the stream URL is actually returning audio (200 OK)
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+
+    const checkLiveStatus = async () => {
+      try {
+        const res = await fetch('/api/check-live');
+        const data = await res.json();
+        setIsLiveStreamActive(data.isLive === true);
+      } catch {
+        setIsLiveStreamActive(false);
+      }
+    };
+
+    // Check immediately, then every 10 seconds
+    checkLiveStatus();
+    interval = setInterval(checkLiveStatus, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Fetch secure stream URL
   useEffect(() => {
@@ -107,7 +130,18 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     const t2Duration = MORNING_TRACKS[1].durationSec;
     const totalScheduledDuration = t1Duration + t2Duration;
 
-    if (elapsedSeconds >= 0 && elapsedSeconds < t1Duration) {
+    if (isLiveStreamActive) {
+      // 🚀 HARD OVERRIDE: If the real stream is active, override the morning routine!
+      targetSrc = streamUrl;
+      targetOffset = 0;
+      targetMode = 'live';
+      targetTrack = {
+        title: 'ON AIR',
+        artist: 'T Double H FM',
+        cover: '/bg.jpg',
+      };
+      timeUntilNextEventMs = 10000; // re-evaluate when status might change
+    } else if (elapsedSeconds >= 0 && elapsedSeconds < t1Duration) {
       // We are within Track 1
       targetSrc = MORNING_TRACKS[0].src;
       targetOffset = elapsedSeconds;
@@ -173,15 +207,15 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       evaluateAndPlay();
     }, timeUntilNextEventMs);
 
-  }, [streamUrl, isPlaying]);
+  }, [streamUrl, isPlaying, isLiveStreamActive]);
 
-  // Evaluate state when streamUrl loads or just periodically to catch boundaries if paused
+  // Evaluate state when streamUrl loads, isLiveStreamActive changes, or periodically to catch boundaries
   useEffect(() => {
     if (streamUrl) evaluateAndPlay();
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [streamUrl, evaluateAndPlay]);
+  }, [streamUrl, isLiveStreamActive, evaluateAndPlay]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;

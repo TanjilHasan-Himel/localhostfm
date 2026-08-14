@@ -30,9 +30,9 @@ const securityHeaders = [
       // Allow fonts from Google and self
       "font-src 'self' https://fonts.gstatic.com",
       // CRITICAL: Only allow audio streams from our own API proxy and trusted radio CDNs
-      "media-src 'self' blob: https://stream.zeno.fm",
+      "media-src 'self' blob: https://stream.zeno.fm http://localhost:8000",
       // Allow connections to our own API routes only
-      "connect-src 'self' https://stream.zeno.fm",
+      "connect-src 'self' https://stream.zeno.fm http://localhost:8000",
       // Never allow framing from other sites
       "frame-ancestors 'none'",
       // Prevent form submissions to external sites
