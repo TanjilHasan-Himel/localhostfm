@@ -45,3 +45,25 @@ body {
 .animate-rhythm {
   animation: rhythm-glow 3s infinite ease-in-out;
 }
+
+@keyframes float-leaf-1 {
+  0% { transform: translateY(0px) rotate(0deg) translateX(0px); }
+  33% { transform: translateY(-10px) rotate(2deg) translateX(5px); }
+  66% { transform: translateY(5px) rotate(-1deg) translateX(-3px); }
+  100% { transform: translateY(0px) rotate(0deg) translateX(0px); }
+}
+
+@keyframes float-leaf-2 {
+  0% { transform: translateY(0px) rotate(0deg) translateX(0px); }
+  33% { transform: translateY(8px) rotate(-2deg) translateX(-4px); }
+  66% { transform: translateY(-12px) rotate(1deg) translateX(6px); }
+  100% { transform: translateY(0px) rotate(0deg) translateX(0px); }
+}
+
+.animate-float-1 {
+  animation: float-leaf-1 8s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float-leaf-2 9s ease-in-out infinite;
+}
