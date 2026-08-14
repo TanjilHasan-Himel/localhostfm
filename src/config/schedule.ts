@@ -34,8 +34,8 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     artist: '70s, 80s, 90s',
     streams: [
       { url: 'https://media-ssl.musicradio.com/Heart80sMP3', stationName: 'Heart 80s UK' },
-      { url: 'http://158.69.114.190:8065/;', stationName: 'The Big 80s Station' },
-      { url: 'http://regiocast.streamabc.net/regc-80s80smweb2517500-mp3-192-1672667', stationName: '80s80s Radio HQ' }
+      { url: 'https://stream.zeno.fm/9eq506qbb1quv', stationName: '80s Hits (Zeno)' },
+      { url: 'https://stream.zeno.fm/m95u52m39v8uv', stationName: 'Retro 80s' }
     ]
   },
   {
@@ -49,7 +49,7 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     streams: [
       { url: 'https://ice5.somafm.com/groovesalad-128-mp3', stationName: 'SomaFM Groove Salad' },
       { url: 'https://ice6.somafm.com/secretagent-128-mp3', stationName: 'SomaFM Secret Agent' },
-      { url: 'http://radio.stereoscenic.com/asp-h', stationName: 'Ambient Sleeping Pill' }
+      { url: 'https://stream.zeno.fm/4wt8n21x8d0uv', stationName: 'Ambient Relax' }
     ]
   },
   {
@@ -61,9 +61,9 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     genre: 'Bollywood Morning',
     artist: 'Top 40 & Pop',
     streams: [
-      { url: 'http://192.99.8.192:5032/;stream', stationName: 'Fnf.Fm Hindi' },
-      { url: 'http://stream.zeno.fm/8ty8szwpwfeuv', stationName: 'Hits Of Bollywood' },
-      { url: 'https://stream-143.zeno.fm/fdgs82xkzhhvv', stationName: 'Retro Bollywood 90s' }
+      { url: 'https://stream-143.zeno.fm/fdgs82xkzhhvv', stationName: 'Retro Bollywood 90s' },
+      { url: 'https://stream.zeno.fm/8ty8szwpwfeuv', stationName: 'Hits Of Bollywood' },
+      { url: 'https://stream.zeno.fm/2p0y4wvubxquv', stationName: 'Desi Bollywood' }
     ]
   },
   {
@@ -90,7 +90,7 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     streams: [
       { url: 'https://0nlineradio.radioho.st/0r-lo-fi', stationName: '0R Lofi Focus Vibes' },
       { url: 'https://stream.zeno.fm/tabzverz0fctv', stationName: 'Box Lofi Radio' },
-      { url: 'http://usa9.fastcast4u.com/proxy/jamz?mp=/1', stationName: 'Lofi 24/7' }
+      { url: 'https://stream.zeno.fm/fvxndn98198uv', stationName: 'Lofi 24/7' }
     ]
   },
   {
@@ -104,7 +104,7 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     streams: [
       { url: 'https://listen.moe/kpop/stream', stationName: 'Listen.moe K-Pop' },
       { url: 'https://nl4.mystreaming.net/er/bts/icecast.audio', stationName: 'Exclusively BTS' },
-      { url: 'http://radio.shirayuki.org:9200/', stationName: 'Yggdrasil Radio' }
+      { url: 'https://stream.zeno.fm/1f4w9e56n38uv', stationName: 'K-Pop Anime Mix' }
     ]
   },
   {
@@ -116,7 +116,7 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     genre: 'Spanish & Latin',
     artist: 'Reggaeton Hits',
     streams: [
-      { url: 'http://icecast.funradio.fr/fun-1-44-128', stationName: 'FUN Radio Latin' },
+      { url: 'https://icecast.funradio.fr/fun-1-44-128', stationName: 'FUN Radio Latin' },
       { url: 'https://live.convoynetwork.com/stream', stationName: 'Convoy en vivo' },
       { url: 'https://breakz-2012-high.rautemusik.fm/?ref=radiobrowser-top100-clubcharts', stationName: 'Latin & Moombahton Mix' }
     ]
@@ -131,7 +131,7 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     artist: 'Soft Acoustic',
     streams: [
       { url: 'https://radio.mellowbangla.com/stream', stationName: 'Mellow Bangla' },
-      { url: 'http://as1.digitalsynapsebd.com:8582/;', stationName: 'Bangladesh Local Radio' }
+      { url: 'https://stream.zeno.fm/w571sngmsxquv', stationName: 'Bangladesh Local Radio' }
     ]
   },
   {
@@ -144,7 +144,7 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     artist: 'Club Mix',
     streams: [
       { url: 'https://breakz-2012-high.rautemusik.fm/?ref=rb-djclubcharts', stationName: 'DJ & CLUB CHARTS' },
-      { url: 'http://playerservices.streamtheworld.com/api/livestream-redirect/LOS40_DANCE_SC', stationName: 'Los 40 Dance' }
+      { url: 'https://stream.zeno.fm/xnvp64v2r2zuv', stationName: 'Dance Club Mix' }
     ]
   },
   {
@@ -156,7 +156,7 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     genre: 'Jazz & Hip-Hop',
     artist: 'Night Vibes',
     streams: [
-      { url: 'http://jking.cdnstream1.com/b22139_128mp3', stationName: '101 Smooth Jazz' },
+      { url: 'https://stream.zeno.fm/a83h16a3v2zuv', stationName: '101 Smooth Jazz' },
       { url: 'https://jazzblues.ice.infomaniak.ch/jazzblues-high.mp3', stationName: 'Jazz Radio Blues HQ' },
       { url: 'https://icecast.walmradio.com:8443/jazz', stationName: 'Adroit Jazz Underground' }
     ]
@@ -170,7 +170,7 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     genre: 'Classical Piano',
     artist: 'Deep Focus',
     streams: [
-      { url: 'http://relax.stream.publicradio.org/relax.mp3', stationName: 'Your Classical Relax' },
+      { url: 'https://stream.zeno.fm/8qgvw46c3qruv', stationName: 'Your Classical Relax' },
       { url: 'https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8', stationName: 'Vivid Bharti Classical' }
     ]
   },
@@ -184,7 +184,7 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
     artist: 'Midnight Mood',
     streams: [
       { url: 'https://jazzblues.ice.infomaniak.ch/jazzblues-high.mp3', stationName: 'Jazz Radio Blues HQ' },
-      { url: 'http://jking.cdnstream1.com/b22139_128mp3', stationName: '101 Smooth Jazz' }
+      { url: 'https://stream.zeno.fm/a83h16a3v2zuv', stationName: '101 Smooth Jazz' }
     ]
   }
 ];
