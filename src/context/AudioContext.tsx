@@ -20,6 +20,7 @@ interface AudioContextType {
   audioRef: React.RefObject<HTMLAudioElement | null>;
   audioMode: AudioMode;
   nextScheduledTime: string | null;
+  loading: boolean;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -59,12 +60,13 @@ function formatNextScheduledTime(): string {
 
 export function AudioProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [audioMode, setAudioMode] = useState<AudioMode>('live');
   const [nextScheduledTime, setNextScheduledTime] = useState<string | null>(null);
   const [currentTrack, setCurrentTrack] = useState<TrackInfo>({
     title: 'Loading...',
-    artist: 'Lofi Radio',
+    artist: 'T Double H FM',
     cover: '/bg.jpg',
   });
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
@@ -183,6 +185,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     const targetSrcPath = new URL(targetSrc, window.location.origin).pathname;
 
     if (currentSrcPath !== targetSrcPath || isInitialPlay) {
+      setLoading(true);
       audioRef.current.src = targetSrc;
       audioRef.current.load();
       
@@ -196,7 +199,10 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       }
       
       if (isPlaying || isInitialPlay) {
-        audioRef.current.play().catch(console.error);
+        audioRef.current.play().catch((e) => {
+          console.error(e);
+          setLoading(false);
+        });
         setIsPlaying(true);
       }
     }
@@ -223,7 +229,9 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
+      setLoading(false);
     } else {
+      setLoading(true);
       // Force an evaluation to ensure we jump to the correct pseudo-live timestamp
       evaluateAndPlay(true);
     }
@@ -241,9 +249,18 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         audioRef,
         audioMode,
         nextScheduledTime,
+        loading,
       }}
     >
-      <audio ref={audioRef} preload="none" crossOrigin="anonymous" />
+      <audio 
+        ref={audioRef} 
+        preload="none" 
+        crossOrigin="anonymous" 
+        onWaiting={() => setLoading(true)}
+        onPlaying={() => setLoading(false)}
+        onCanPlay={() => setLoading(false)}
+        onError={() => setLoading(false)}
+      />
       {children}
     </AudioContext.Provider>
   );
