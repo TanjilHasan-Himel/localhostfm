@@ -58,7 +58,7 @@ function formatNextScheduledTime(): string {
     (next.getDate() !== now.getDate() ? ' (tomorrow)' : ' (today)');
 }
 
-import { getActiveScheduledStream } from '@/config/schedule';
+import { getActiveScheduledStream, DAILY_SCHEDULE } from '@/config/schedule';
 
 export function AudioProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false);
