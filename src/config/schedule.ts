@@ -189,29 +189,17 @@ export const DAILY_SCHEDULE: ScheduleSlot[] = [
   }
 ];
 
-export function getActiveScheduledStream(now: Date): ActiveStream | null {
+export function getActiveScheduledStream(now: Date): ScheduleSlot | null {
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
   const currentTimeInMinutes = currentHour * 60 + currentMinute;
-  const dayOfWeek = now.getDay(); // 0 (Sun) to 6 (Sat)
 
   for (const slot of DAILY_SCHEDULE) {
     const startTimeInMinutes = slot.startHour * 60 + slot.startMinute;
     const endTimeInMinutes = slot.endHour * 60 + slot.endMinute;
 
     if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes < endTimeInMinutes) {
-      // Logic for alternative days: use modulus to cycle through the streams array
-      const streamIndex = dayOfWeek % slot.streams.length;
-      const selectedStream = slot.streams[streamIndex];
-
-      return {
-        genre: slot.genre,
-        artist: slot.artist,
-        streamUrl: selectedStream.url,
-        stationName: selectedStream.stationName,
-        endHour: slot.endHour,
-        endMinute: slot.endMinute
-      };
+      return slot;
     }
   }
   return null;

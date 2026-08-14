@@ -73,6 +73,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   });
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
   const [isLiveStreamActive, setIsLiveStreamActive] = useState(false);
+  const [fallbackIndex, setFallbackIndex] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -164,12 +165,20 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       // Let's check the dynamic 24/7 internet radio schedule
       const activeSlot = getActiveScheduledStream(now);
 
-      if (activeSlot) {
-        targetSrc = activeSlot.streamUrl;
+      if (activeSlot && activeSlot.streams.length > 0) {
+        // Base logic for alternating days
+        const dayOfWeek = now.getDay();
+        const baseIndex = dayOfWeek % activeSlot.streams.length;
+        
+        // Include fallback index in case of errors
+        const actualIndex = (baseIndex + fallbackIndex) % activeSlot.streams.length;
+        const selectedStream = activeSlot.streams[actualIndex];
+
+        targetSrc = selectedStream.url;
         targetOffset = 0;
         targetMode = 'live'; // Treat internet radio as live
         targetTrack = {
-          title: `${activeSlot.genre} - ${activeSlot.stationName}`,
+          title: `${activeSlot.genre} - ${selectedStream.stationName}`,
           artist: activeSlot.artist,
           cover: '/bg.jpg',
         };
@@ -230,10 +239,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     // Schedule the next evaluation
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
+      setFallbackIndex(0); // Reset fallback index for the new slot
       evaluateAndPlay();
     }, timeUntilNextEventMs);
 
-  }, [streamUrl, isPlaying, isLiveStreamActive]);
+  }, [streamUrl, isPlaying, isLiveStreamActive, fallbackIndex]);
 
   // Evaluate state when streamUrl loads, isLiveStreamActive changes, or periodically to catch boundaries
   useEffect(() => {
@@ -252,9 +262,16 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     } else {
       setLoading(true);
+      setFallbackIndex(0); // Reset fallback index when manually playing
       // Force an evaluation to ensure we jump to the correct pseudo-live timestamp
       evaluateAndPlay(true);
     }
+  };
+
+  const handleAudioError = () => {
+    console.warn("Audio stream failed to load, trying next fallback...");
+    setLoading(true);
+    setFallbackIndex(prev => prev + 1);
   };
 
   return (
@@ -278,7 +295,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         onWaiting={() => setLoading(true)}
         onPlaying={() => setLoading(false)}
         onCanPlay={() => setLoading(false)}
-        onError={() => setLoading(false)}
+        onError={handleAudioError}
       />
       {children}
     </AudioContext.Provider>
