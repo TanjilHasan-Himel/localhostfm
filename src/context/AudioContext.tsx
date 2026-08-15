@@ -26,10 +26,12 @@ interface AudioContextType {
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 const JINGLE_HOURS = [0, 1, 2, 3, 4, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-const JINGLE_FILES = [
-  '/audio/Non_Stop_Drive.mp3',
-  '/audio/On_The_Air.mp3',
-  '/audio/মিউজিক_নন_স্টপ.mp3'
+const GENERIC_JINGLES = [
+  '/audio/jingle/Non_Stop_Drive.mp3',
+  '/audio/jingle/On_The_Air.mp3',
+  '/audio/jingle/T_Double_H.mp3',
+  '/audio/jingle/The_Music_Hub.mp3',
+  '/audio/jingle/মিউজিক_নন_স্টপ.mp3'
 ];
 
 export function AudioProvider({ children }: { children: ReactNode }) {
@@ -75,7 +77,14 @@ export function AudioProvider({ children }: { children: ReactNode }) {
           isJinglePlayingRef.current = true;
           lastFetchedBlock.current = data.block; // Save schedule for when jingle finishes
           
-          const randomJingle = JINGLE_FILES[Math.floor(Math.random() * JINGLE_FILES.length)];
+          let jingleToPlay = '';
+          if (hour === 7 || hour === 8) {
+            jingleToPlay = '/audio/jingle/7am_8am_নতুন_সকাল.mp3';
+          } else if (hour === 1 || hour === 2) {
+            jingleToPlay = '/audio/jingle/T_Double_H_FM_lofi.mp3';
+          } else {
+            jingleToPlay = GENERIC_JINGLES[Math.floor(Math.random() * GENERIC_JINGLES.length)];
+          }
           
           setAudioMode('jingle');
           setCurrentTrack({
@@ -86,7 +95,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
           
           if (audioRef.current) {
             setLoading(true);
-            audioRef.current.src = randomJingle;
+            audioRef.current.src = jingleToPlay;
             audioRef.current.load();
             if (isPlaying || forcePlay) {
               audioRef.current.play().catch(e => {

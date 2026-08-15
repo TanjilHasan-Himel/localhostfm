@@ -42,6 +42,7 @@ export const metadata: Metadata = {
 };
 
 import { AudioProvider } from "@/context/AudioContext";
+import BackgroundVideo from "@/components/BackgroundVideo";
 
 export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
   return (
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: Readonly<{children: React.React
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <BackgroundVideo />
         <AudioProvider>
           {children}
         </AudioProvider>
