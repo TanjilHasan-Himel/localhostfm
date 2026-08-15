@@ -128,9 +128,15 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     let targetTrack = null;
     let timeUntilNextEventMs = 0;
 
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
     const t1Duration = MORNING_TRACKS[0].durationSec;
     const t2Duration = MORNING_TRACKS[1].durationSec;
     const totalScheduledDuration = t1Duration + t2Duration;
+
+    const timeInMinutes = currentHour * 60 + currentMinute;
+    const isNightRetroBlock = timeInMinutes >= 1 && timeInMinutes < (4 * 60 + 25);
 
     if (isLiveStreamActive) {
       // 🚀 HARD OVERRIDE: If the real stream is active, override the morning routine!
@@ -143,6 +149,17 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         cover: '/bg.jpg',
       };
       timeUntilNextEventMs = 10000; // re-evaluate when status might change
+    } else if (isNightRetroBlock) {
+      // 🌙 Night Retro Block (12:01 AM to 4:25 AM)
+      targetSrc = 'https://ice1.somafm.com/u80s-128-mp3';
+      targetOffset = 0;
+      targetMode = 'live'; 
+      targetTrack = {
+        title: 'Retro 80s Night',
+        artist: 'SomaFM Fallback',
+        cover: '/bg.jpg',
+      };
+      timeUntilNextEventMs = scheduledTime.getTime() - now.getTime(); // Wait until morning routine
     } else if (elapsedSeconds >= 0 && elapsedSeconds < t1Duration) {
       // We are within Track 1
       targetSrc = MORNING_TRACKS[0].src;
@@ -158,7 +175,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       targetTrack = MORNING_TRACKS[1];
       timeUntilNextEventMs = (totalScheduledDuration - elapsedSeconds) * 1000;
     } else {
-      // Outside scheduled block -> Live stream
+      // Outside scheduled block -> Live stream (or silence if Cloudflare is down)
       targetSrc = streamUrl;
       targetOffset = 0;
       targetMode = 'live';
@@ -255,7 +272,6 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       <audio 
         ref={audioRef} 
         preload="none" 
-        crossOrigin="anonymous" 
         onWaiting={() => setLoading(true)}
         onPlaying={() => setLoading(false)}
         onCanPlay={() => setLoading(false)}
