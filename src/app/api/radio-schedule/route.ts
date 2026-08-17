@@ -98,25 +98,25 @@ export async function GET() {
     } else if (isWeekend) {
       block = { url: 'https://ice1.somafm.com/groovesalad-128-mp3', title: 'Acoustic Morning & Soft Chill', artist: 'Morning Vibe', mode: 'live' };
     } else {
-      block = { url: 'https://stream.zeno.fm/8x04z83v838uv', title: 'Weekend Spiritual', artist: 'Morning Vibe', mode: 'live' };
+      block = { url: 'https://www.desizoneradio.com/relay1', title: 'DesiZone Morning', artist: 'Morning Vibe', mode: 'live' };
     }
   }
   else if (timeInMinutes >= time(11, 1) && timeInMinutes < time(15, 1)) {
     // 💻 Office/Campus Time (11:01 AM - 3:00 PM)
     if (isWeekday) {
-      block = { url: 'https://stream.zeno.fm/8x04z83v838uv', title: 'Bollywood Blockbusters', artist: 'Office Time', mode: 'live' };
+      block = { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', title: 'Bollywood Blockbusters', artist: 'Office Time', mode: 'live' };
     } else if (isWeekend) {
       block = { url: 'https://ice1.somafm.com/indiepop-128-mp3', title: 'Global Top 40', artist: 'Office Time', mode: 'live' };
     } else {
-      block = { url: 'https://ice1.somafm.com/fluid-128-mp3', title: 'Lofi Hip-Hop', artist: 'Office Time', mode: 'live' };
+      block = { url: 'https://ice1.somafm.com/poptron-128-mp3', title: 'Modern Electro-Pop', artist: 'Office Time', mode: 'live' };
     }
   }
   else if (timeInMinutes >= time(15, 1) && timeInMinutes < time(18, 1)) {
     // ☕ Afternoon Bangla Vibe (3:01 PM - 6:00 PM)
     if (isWeekday) {
-      block = { url: 'https://stream.zeno.fm/8x04z83v838uv', title: 'Bangla Modern & Melody', artist: 'Afternoon Vibe', mode: 'live' };
+      block = { url: 'https://www.desizoneradio.com/relay1', title: 'DesiZone Hits', artist: 'Afternoon Vibe', mode: 'live' };
     } else if (isWeekend) {
-      block = { url: 'https://ice1.somafm.com/bagel-128-mp3', title: 'Bangla Band & Rock', artist: 'Afternoon Vibe', mode: 'live' };
+      block = { url: 'https://drive.uber.radio/uber/bollywood2010s/icecast.audio', title: 'Bollywood 2010s', artist: 'Afternoon Vibe', mode: 'live' };
     } else {
       block = { url: 'https://radio.talksport.com/stream', title: 'Live Sports Update', artist: 'talkSPORT', mode: 'live' };
     }
@@ -144,7 +144,7 @@ export async function GET() {
     if (isWeekday) {
       block = { url: 'https://ice1.somafm.com/illstreet-128-mp3', title: 'Smooth Jazz & Blues', artist: 'Late Night Classics', mode: 'live' };
     } else if (isWeekend) {
-      block = { url: 'https://stream.zeno.fm/8x04z83v838uv', title: 'Hindi Retro', artist: 'Late Night Classics', mode: 'live' };
+      block = { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', title: 'Hindi Retro', artist: 'Late Night Classics', mode: 'live' };
     } else {
       block = { url: 'https://ice1.somafm.com/deepspaceone-128-mp3', title: 'Neo-Soul & Deep House', artist: 'Late Night Classics', mode: 'live' };
     }
