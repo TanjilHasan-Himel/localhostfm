@@ -61,6 +61,13 @@ export default function GlobalPlayer() {
           />
         </div>
       </div>
+      
+      {/* Disclaimer Warning */}
+      <div className="max-w-6xl mx-auto mt-3 text-center pointer-events-none">
+        <p className="text-[9px] md:text-[10px] text-white/50 tracking-wide">
+          ⚠️ Third-party gambling content may appear. T Double H FM does not endorse or operate such services ⚠️
+        </p>
+      </div>
     </div>
   );
 }
