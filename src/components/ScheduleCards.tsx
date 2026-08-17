@@ -54,23 +54,24 @@ export default function ScheduleCards() {
   }, []);
 
   return (
-    <div className="absolute top-12 right-4 md:right-12 flex flex-col gap-4 z-40 pointer-events-none">
+    <div className="w-full flex flex-row justify-between items-end px-2 md:px-12 pointer-events-none mb-2 md:mb-4">
       {SCHEDULED_PROGRAMS.map((prog, index) => {
         const isLiveNow = activeProgram === prog.id;
-        const animationClass = index % 2 === 0 ? 'animate-float-1' : 'animate-float-2';
+        // Animation class based on left (index 0) or right (index 1)
+        const animationClass = index % 2 === 0 ? 'animate-float-1 origin-left' : 'animate-float-2 origin-right';
 
         return (
           <div 
             key={prog.id} 
-            className={`glass relative overflow-hidden rounded-2xl p-4 w-64 shadow-xl border border-white/10 transition-all duration-700 pointer-events-auto ${animationClass}`}
+            className={`relative overflow-hidden rounded-xl md:rounded-2xl p-2 md:p-4 w-[48%] md:w-64 shadow-2xl border border-white/20 bg-white/5 backdrop-blur-md md:backdrop-blur-xl transition-all duration-700 pointer-events-auto ${animationClass}`}
           >
             {/* Gradient background */}
             <div className={`absolute inset-0 bg-gradient-to-br ${prog.theme} opacity-50 pointer-events-none`}></div>
 
             {/* Content */}
-            <div className="relative z-10 flex flex-col">
-              <div className="flex justify-between items-start mb-2">
-                <span className="text-xs font-bold text-white/60 uppercase tracking-wider bg-black/20 px-2 py-1 rounded-md">
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <div className="flex flex-col items-center mb-1 md:mb-2 gap-1 md:gap-2">
+                <span className="text-[9px] md:text-xs font-bold text-white/80 uppercase tracking-wider bg-black/30 px-1.5 md:px-2 py-0.5 md:py-1 rounded-md">
                   {prog.description}
                 </span>
                 
@@ -83,11 +84,11 @@ export default function ScheduleCards() {
                 )}
               </div>
 
-              <h3 className={`text-xl font-bold mb-1 ${isLiveNow ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]' : 'text-white/90'}`}>
+              <h3 className={`text-sm md:text-xl font-bold mb-0.5 md:mb-1 ${isLiveNow ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]' : 'text-white/90'}`}>
                 {prog.name}
               </h3>
               
-              <p className="text-sm font-medium text-white/70 flex items-center gap-1.5">
+              <p className="text-[10px] md:text-sm font-medium text-white/70 flex items-center justify-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white/50">
                   <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clipRule="evenodd" />
                 </svg>

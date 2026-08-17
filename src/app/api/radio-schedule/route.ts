@@ -142,7 +142,7 @@ export async function GET() {
   else if (timeInMinutes >= time(21, 1) || timeInMinutes === 0) {
     // 🌌 Late Night Classics (9:01 PM - 12:00 AM)
     if (isWeekday) {
-      block = { url: 'https://ice1.somafm.com/illstreet-128-mp3', title: 'Smooth Jazz & Blues', artist: 'Late Night Classics', mode: 'live' };
+      block = { url: 'https://www.desizoneradio.com/relay1', title: 'Late Night Hits', artist: 'Late Night Classics', mode: 'live' };
     } else if (isWeekend) {
       block = { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', title: 'Hindi Retro', artist: 'Late Night Classics', mode: 'live' };
     } else {

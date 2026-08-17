@@ -72,3 +72,13 @@ body {
 .animate-float-2 {
   animation: float-leaf-2 9s ease-in-out infinite;
 }
+
+@keyframes air-wave {
+  0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+  50% { transform: translateY(-8px) scale(1.02); filter: drop-shadow(0 0 20px rgba(255,255,255,0.4)); }
+  100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+}
+
+.animate-air-wave {
+  animation: air-wave 4s ease-in-out infinite;
+}
