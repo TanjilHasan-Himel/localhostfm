@@ -71,14 +71,14 @@ export default function NowPlaying() {
             </p>
             
             {/* Up Next Badge */}
-            {nextTrack && currentTrack.title !== 'ON AIR' && (
+            {nextTrack && (
               <div className="mt-3 flex justify-center animate-in fade-in slide-in-from-bottom-1 duration-700">
                 <div className="bg-black/20 px-3 py-1 rounded-full border border-white/5 flex items-center gap-1.5 backdrop-blur-sm">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-white/40">
                     <path fillRule="evenodd" d="M13.28 11.47a.75.75 0 010 1.06l-3.25 3.25a.75.75 0 01-1.06-1.06L11.69 12 8.97 9.28a.75.75 0 011.06-1.06l3.25 3.25zM17.28 11.47a.75.75 0 010 1.06l-3.25 3.25a.75.75 0 11-1.06-1.06L15.69 12l-2.72-2.72a.75.75 0 011.06-1.06l3.25 3.25z" clipRule="evenodd" />
                   </svg>
                   <span className="text-[10px] font-medium text-white/50 uppercase tracking-widest">
-                    Up Next: <span className="text-white/70">{nextTrack.title}</span> <span className="lowercase text-white/40">({nextTrack.time})</span>
+                    Up Next: <span className="text-white/70">{nextTrack.title}</span>
                   </span>
                 </div>
               </div>
