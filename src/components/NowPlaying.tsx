@@ -71,7 +71,7 @@ export default function NowPlaying() {
             </p>
             
             {/* Up Next Badge */}
-            {nextTrack && !isLive && (
+            {nextTrack && currentTrack.title !== 'ON AIR' && (
               <div className="mt-3 flex justify-center animate-in fade-in slide-in-from-bottom-1 duration-700">
                 <div className="bg-black/20 px-3 py-1 rounded-full border border-white/5 flex items-center gap-1.5 backdrop-blur-sm">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-white/40">
