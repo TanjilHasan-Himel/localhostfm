@@ -14,7 +14,7 @@ const SCHEDULED_PROGRAMS = [
   },
   {
     id: 'besi-raat',
-    name: 'Besi Raat',
+    name: 'Night Whisper',
     dayOfWeek: 5, // Friday
     startTime: '01:00',
     endTime: '02:00',

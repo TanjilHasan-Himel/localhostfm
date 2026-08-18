@@ -21,6 +21,7 @@ interface AudioContextType {
   audioMode: AudioMode;
   nextScheduledTime: string | null;
   loading: boolean;
+  nextTrack: { title: string; time: string } | null;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -48,6 +49,8 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     artist: 'T Double H FM',
     cover: '/bg.jpg',
   });
+  
+  const [nextTrack, setNextTrack] = useState<{ title: string; time: string } | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playedJingleForHour = useRef<number>(-1);
@@ -113,6 +116,10 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       // Normal Schedule Playback
       const block = data.block;
       if (!block) return;
+      
+      if (data.nextBlock) {
+        setNextTrack(data.nextBlock);
+      }
 
       const currentSrcPath = new URL(audioRef.current?.src || 'http://localhost').pathname;
       const targetSrcPath = new URL(block.url, window.location.origin).pathname;
@@ -239,6 +246,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         audioMode,
         nextScheduledTime,
         loading,
+        nextTrack,
       }}
     >
       <audio 
