@@ -149,7 +149,7 @@ export async function GET() {
       } else if (isWeekend) {
         b = { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', title: 'Hindi Retro', artist: 'Late Night Classics', mode: 'live' };
       } else {
-        b = { url: 'https://ice1.somafm.com/deepspaceone-128-mp3', title: 'Neo-Soul & Deep House', artist: 'Late Night Classics', mode: 'live' };
+        b = { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', title: 'Friday Night', artist: 'Late Night Classics', mode: 'live' };
       }
       return { block: b, nextTitle: 'Night Retro Block', nextTime: '12:00 AM' };
     }
