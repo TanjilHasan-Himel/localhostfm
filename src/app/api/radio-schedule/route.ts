@@ -29,7 +29,13 @@ const englishLinks = [
 ];
 
 // Helper to securely proxy links to avoid Mixed Content (HTTP on HTTPS)
-const secureLink = (url: string) => `/api/stream?url=${encodeURIComponent(url)}`;
+// Only proxies http:// links. https:// and local links (/audio) are returned directly.
+const secureLink = (url: string) => {
+  if (url.startsWith('http://')) {
+    return `/api/stream?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+};
 
 export async function GET() {
   const streamUrl = process.env.STREAM_URL;

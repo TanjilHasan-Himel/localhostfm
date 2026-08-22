@@ -146,8 +146,8 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         setNextTrack(data.nextBlock);
       }
 
-      const currentSrcPath = new URL(audioRef.current?.src || 'http://localhost').pathname;
-      const targetSrcPath = new URL(block.url, window.location.origin).pathname;
+      const currentSrcPath = new URL(audioRef.current?.src || 'http://localhost').pathname + new URL(audioRef.current?.src || 'http://localhost').search;
+      const targetSrcPath = new URL(block.url, window.location.origin).pathname + new URL(block.url, window.location.origin).search;
 
       if (currentSrcPath !== targetSrcPath || forcePlay) {
         setAudioMode(block.mode);

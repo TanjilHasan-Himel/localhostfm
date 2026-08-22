@@ -14,10 +14,11 @@ export async function GET(req: NextRequest) {
   try {
     // Fetch the external stream
     const response = await fetch(streamUrl, {
-      // Avoid timeouts by not setting a signal or timeout on edge runtime
+      // Mimic a real browser to prevent radio servers from dropping the connection
       headers: {
-        'User-Agent': 'TDoubleHFM-Proxy/1.0',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
         'Accept': '*/*',
+        'Icy-MetaData': '1', // Important for shoutcast/icecast
       }
     });
 
