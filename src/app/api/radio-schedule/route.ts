@@ -110,12 +110,15 @@ export async function GET() {
         nextTitle: '3rd Night Hour', nextTime: '2:01 AM'
       };
     }
-    // 2:01 AM - 3:00 AM: 3rd Night Hour (90s / Modern Hindi)
+    // 2:01 AM - 3:00 AM: 3rd Night Hour
     else if (mins >= time(2, 1) && mins < time(3, 1)) {
-      return {
-        block: { url: secureLink('https://stream.zeno.fm/jmi0hwxrgmauv'), title: '3rd Night Hour', artist: '90s & Modern Hindi', mode: 'live' },
-        nextTitle: 'Night OWL', nextTime: '3:01 AM'
-      };
+      let b: ScheduleBlock;
+      if (day === 1 || day === 3) { // Monday, Wednesday
+        b = { url: secureLink('https://noasrv.caster.fm:10182/stream'), title: '3rd Night Hour', artist: 'Bangla Hits', mode: 'live' };
+      } else {
+        b = { url: secureLink('https://stream.zeno.fm/jmi0hwxrgmauv'), title: '3rd Night Hour', artist: '90s & Modern Hindi', mode: 'live' };
+      }
+      return { block: b, nextTitle: 'Night OWL', nextTime: '3:01 AM' };
     }
     // 3:01 AM - 4:15 AM: Night OWL
     else if (mins >= time(3, 1) && mins < time(4, 15)) {
@@ -190,22 +193,30 @@ export async function GET() {
         nextTitle: 'Evening Pop Culture', nextTime: '8:31 PM'
       };
     }
-    // 8:31 PM - 10:00 PM: Evening Pop Culture
+    // 8:31 PM - 10:00 PM: Evening Pop Culture / Evening Tea Cup
     else if (mins >= time(20, 31) && mins < time(22, 1)) {
       let b: ScheduleBlock;
-      if (isWeekday) {
-        b = { url: secureLink(pickEnglish.url), title: 'Evening Pop Culture', artist: pickEnglish.name, mode: 'live' };
+      if (day !== 2 && day !== 3) { // Sat, Sun, Mon, Thu, Fri
+        b = { url: secureLink('https://stream.radiocaroline.net/'), title: 'Evening Tea Cup', artist: 'Radio Caroline', mode: 'live' };
       } else {
-        b = { url: secureLink(pickHindi.url), title: 'Evening Pop Culture', artist: pickHindi.name, mode: 'live' };
+        if (isWeekday) {
+          b = { url: secureLink(pickEnglish.url), title: 'Evening Pop Culture', artist: pickEnglish.name, mode: 'live' };
+        } else {
+          b = { url: secureLink(pickHindi.url), title: 'Evening Pop Culture', artist: pickHindi.name, mode: 'live' };
+        }
       }
       return { block: b, nextTitle: 'Night Musics', nextTime: '10:01 PM' };
     }
-    // 10:01 PM - 12:00 AM: Night Musics
+    // 10:01 PM - 12:00 AM: Night Musics / Bangla
     else {
       let b: ScheduleBlock;
-      if (day === 5) { // Friday
-        b = { url: secureLink('https://stream.zeno.fm/jmi0hwxrgmauv'), title: 'Friday Night', artist: 'Night Musics', mode: 'live' };
-      } else {
+      if (day === 6 || day === 3 || day === 4) { // Sat, Wed, Thu
+        b = { url: secureLink('https://radio.mellowbangla.com/stream'), title: 'Night Musics', artist: 'Mellow Bangla', mode: 'live' };
+      } else if (day === 1 || day === 0) { // Mon, Sun
+        b = { url: secureLink('https://noasrv.caster.fm:10182/stream'), title: 'Night Musics', artist: 'Bangla Hits', mode: 'live' };
+      } else if (day === 5) { // Friday
+        b = { url: secureLink('https://stream.zeno.fm/jmi0hwxrgmauv'), title: 'Friday Night', artist: 'Global Hits & Bollywood', mode: 'live' };
+      } else { // Tuesday
         b = { url: secureLink('https://ice1.somafm.com/deepspaceone-128-mp3'), title: 'Night Musics', artist: 'Neo-Soul & Lo-Fi', mode: 'live' };
       }
       return { block: b, nextTitle: 'First Night Hour', nextTime: '12:01 AM' };
