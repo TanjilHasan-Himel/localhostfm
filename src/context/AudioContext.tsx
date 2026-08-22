@@ -115,7 +115,21 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
       // Normal Schedule Playback
       const block = data.block;
-      if (!block) return;
+      if (!block) {
+        if (isPlaying && audioRef.current) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+          setLoading(false);
+          setAudioMode('scheduled');
+          setCurrentTrack({
+            title: 'Silence',
+            artist: 'Quiet Time',
+            cover: '/bg.jpg'
+          });
+        }
+        if (data.nextBlock) setNextTrack(data.nextBlock);
+        return;
+      }
       
       if (data.nextBlock) {
         setNextTrack(data.nextBlock);
