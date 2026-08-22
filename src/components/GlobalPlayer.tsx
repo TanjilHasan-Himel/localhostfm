@@ -18,20 +18,22 @@ export default function GlobalPlayer() {
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         
         {/* Track Info */}
-        <div className="flex items-center gap-4 flex-1">
-          <div className={`w-12 h-12 overflow-hidden flex-shrink-0 rounded-full border-2 border-white/20 shadow-[0_0_10px_rgba(0,0,0,0.5)] ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : 'transition-transform duration-500'}`}>
-            <div className="relative w-full h-full">
+        <div className="flex items-center gap-3 md:gap-4 flex-1 overflow-hidden">
+          <div className={`relative w-12 h-12 md:w-14 md:h-14 flex-shrink-0 rounded-full shadow-[0_0_12px_rgba(0,0,0,0.6)] ${isPlaying ? 'animate-[spin_3s_linear_infinite]' : 'transition-transform duration-500'}`}>
+            {/* The Real Vinyl Image */}
+            <img src="/musicplayer/vinly.png" alt="Vinyl" className="absolute inset-0 w-full h-full object-cover rounded-full" />
+            
+            {/* The Album Cover in the center */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35%] h-[35%] rounded-full overflow-hidden opacity-90">
               <img src={currentTrack.cover} alt="Cover" className="w-full h-full object-cover" />
-              {/* Vinyl center hole and gradient */}
-              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,transparent_35%,rgba(0,0,0,0.2)_50%,rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
-              <div className="absolute inset-[35%] rounded-full bg-black/90 border border-white/10 flex items-center justify-center pointer-events-none">
-                <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>
-              </div>
             </div>
+            
+            {/* Inner Vinyl Hole */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-black rounded-full border border-white/10"></div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-white font-medium text-sm md:text-base line-clamp-1">{currentTrack.title}</span>
-            <span className="text-white/60 text-xs md:text-sm">{currentTrack.artist}</span>
+          <div className="flex flex-col min-w-0">
+            <span className="text-white font-medium text-sm md:text-base truncate">{currentTrack.title}</span>
+            <span className="text-white/60 text-xs md:text-sm truncate">{currentTrack.artist}</span>
           </div>
         </div>
 
