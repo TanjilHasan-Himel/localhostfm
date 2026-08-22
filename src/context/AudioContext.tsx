@@ -193,7 +193,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     }
   }, [isPlaying]);
 
-  // Handle when jingle finishes
+  // Handle when audio finishes or stream drops
   const handleAudioEnded = () => {
     if (isJinglePlayingRef.current) {
       // Jingle is done!
@@ -229,7 +229,21 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         // Safety fallback
         syncSchedule(true);
       }
+    } else if (audioMode === 'live') {
+      // Live stream dropped (e.g. Vercel proxy timeout). Auto-reconnect!
+      console.warn("Live stream ended unexpectedly! Reconnecting...");
+      setTimeout(() => {
+        if (isPlaying) syncSchedule(true);
+      }, 2000);
     }
+  };
+
+  const handleAudioError = () => {
+    setLoading(false);
+    console.warn("Audio stream error! Reconnecting in 3s...");
+    setTimeout(() => {
+      if (isPlaying) syncSchedule(true);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -280,7 +294,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         onWaiting={() => setLoading(true)}
         onPlaying={() => setLoading(false)}
         onCanPlay={() => setLoading(false)}
-        onError={() => setLoading(false)}
+        onError={handleAudioError}
         onEnded={handleAudioEnded}
       />
       {children}
