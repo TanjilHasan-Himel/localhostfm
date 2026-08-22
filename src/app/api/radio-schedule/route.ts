@@ -155,25 +155,24 @@ export async function GET() {
     else if (mins >= time(12, 1) && mins < time(15, 1)) {
       return {
         block: { url: secureLink(pickHindi.url), title: 'Modhanno Somoy', artist: pickHindi.name, mode: 'live' },
-        nextTitle: 'Afternoon Vibe', nextTime: '3:01 PM'
+        nextTitle: 'Public Hour', nextTime: '3:01 PM'
       };
     }
-    // 3:01 PM - 6:00 PM: Afternoon Vibe
+    // 3:01 PM - 6:00 PM: Public Hour (Rotated Mixed Links)
     else if (mins >= time(15, 1) && mins < time(18, 1)) {
       let b: ScheduleBlock;
-      if (isWeekday) {
-        b = { url: secureLink('https://www.desizoneradio.com/relay1'), title: 'DesiZone Hits', artist: 'Afternoon Vibe', mode: 'live' };
-      } else if (isWeekend) {
-        b = { url: secureLink('https://drive.uber.radio/uber/bollywood2010s/icecast.audio'), title: 'Bollywood 2010s', artist: 'Afternoon Vibe', mode: 'live' };
+      // Rotate between English and Hindi based on the day
+      if (day % 2 === 0) {
+        b = { url: secureLink(pickHindi.url), title: 'Public Hour', artist: pickHindi.name, mode: 'live' };
       } else {
-        b = { url: secureLink('https://radio.talksport.com/stream'), title: 'Live Sports Update', artist: 'talkSPORT', mode: 'live' };
+        b = { url: secureLink(pickEnglish.url), title: 'Public Hour', artist: pickEnglish.name, mode: 'live' };
       }
       return { block: b, nextTitle: 'Global Sports Hour', nextTime: '6:01 PM' };
     }
     // 6:01 PM - 8:00 PM: Global Sports Hour
     else if (mins >= time(18, 1) && mins < time(20, 0)) {
       return {
-        block: { url: secureLink('https://radio.talksport.com/stream'), title: 'Live Sports Update', artist: 'talkSPORT', mode: 'live' },
+        block: { url: secureLink('https://radio.talksport.com/stream'), title: 'Global Sports Hour', artist: 'talkSPORT', mode: 'live' },
         nextTitle: 'Prime Time News', nextTime: '8:00 PM'
       };
     }
@@ -188,9 +187,9 @@ export async function GET() {
     else if (mins >= time(20, 31) && mins < time(22, 1)) {
       let b: ScheduleBlock;
       if (isWeekday) {
-        b = { url: secureLink(pickEnglish.url), title: 'Pop Music', artist: 'Evening Pop Culture', mode: 'live' };
+        b = { url: secureLink(pickEnglish.url), title: 'Evening Pop Culture', artist: pickEnglish.name, mode: 'live' };
       } else {
-        b = { url: secureLink(pickHindi.url), title: 'Bollywood Hits', artist: 'Evening Pop Culture', mode: 'live' };
+        b = { url: secureLink(pickHindi.url), title: 'Evening Pop Culture', artist: pickHindi.name, mode: 'live' };
       }
       return { block: b, nextTitle: 'Night Musics', nextTime: '10:01 PM' };
     }
@@ -200,7 +199,7 @@ export async function GET() {
       if (day === 5) { // Friday
         b = { url: secureLink('https://stream.zeno.fm/jmi0hwxrgmauv'), title: 'Friday Night', artist: 'Night Musics', mode: 'live' };
       } else {
-        b = { url: secureLink('https://ice1.somafm.com/deepspaceone-128-mp3'), title: 'Neo-Soul & Lo-Fi', artist: 'Night Musics', mode: 'live' };
+        b = { url: secureLink('https://ice1.somafm.com/deepspaceone-128-mp3'), title: 'Night Musics', artist: 'Neo-Soul & Lo-Fi', mode: 'live' };
       }
       return { block: b, nextTitle: 'First Night Hour', nextTime: '12:01 AM' };
     }

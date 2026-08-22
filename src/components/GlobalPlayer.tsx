@@ -19,8 +19,15 @@ export default function GlobalPlayer() {
         
         {/* Track Info */}
         <div className="flex items-center gap-4 flex-1">
-          <div className="w-12 h-12 rounded-md overflow-hidden bg-white/10 flex-shrink-0">
-            <img src={currentTrack.cover} alt="Cover" className="w-full h-full object-cover" />
+          <div className={`w-12 h-12 overflow-hidden flex-shrink-0 rounded-full border-2 border-white/20 shadow-[0_0_10px_rgba(0,0,0,0.5)] ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : 'transition-transform duration-500'}`}>
+            <div className="relative w-full h-full">
+              <img src={currentTrack.cover} alt="Cover" className="w-full h-full object-cover" />
+              {/* Vinyl center hole and gradient */}
+              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,transparent_35%,rgba(0,0,0,0.2)_50%,rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
+              <div className="absolute inset-[35%] rounded-full bg-black/90 border border-white/10 flex items-center justify-center pointer-events-none">
+                <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>
+              </div>
+            </div>
           </div>
           <div className="flex flex-col">
             <span className="text-white font-medium text-sm md:text-base line-clamp-1">{currentTrack.title}</span>
