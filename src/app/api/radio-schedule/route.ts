@@ -107,14 +107,21 @@ export async function GET() {
     else if (mins >= time(1, 1) && mins < time(2, 1)) {
       return {
         block: { url: secureLink(pickEnglish.url), title: '2nd Hour Show', artist: pickEnglish.name, mode: 'live' },
-        nextTitle: 'Night OWL', nextTime: '2:01 AM'
+        nextTitle: '3rd Night Hour', nextTime: '2:01 AM'
       };
     }
-    // 2:01 AM - 4:15 AM: Night OWL
-    else if (mins >= time(2, 1) && mins < time(4, 15)) {
+    // 2:01 AM - 3:00 AM: 3rd Night Hour (Repeat of 12:01 AM)
+    else if (mins >= time(2, 1) && mins < time(3, 1)) {
+      return {
+        block: { url: secureLink(pickHindi.url), title: '3rd Night Hour', artist: pickHindi.name, mode: 'live' },
+        nextTitle: 'Night OWL', nextTime: '3:01 AM'
+      };
+    }
+    // 3:01 AM - 4:15 AM: Night OWL
+    else if (mins >= time(3, 1) && mins < time(4, 15)) {
       let b: ScheduleBlock;
-      // 2:30 AM - 3:00 AM: Jazz
-      if (mins >= time(2, 30) && mins < time(3, 0)) {
+      // 3:30 AM - 4:00 AM: Jazz
+      if (mins >= time(3, 30) && mins < time(4, 0)) {
         b = { url: secureLink('https://ice1.somafm.com/secretagent-128-mp3'), title: 'Night OWL (Jazz)', artist: 'Lounge & Jazz', mode: 'live' };
       } else {
         b = { url: secureLink('https://ice1.somafm.com/groovesalad-128-mp3'), title: 'Night OWL', artist: 'Relaxing Songs', mode: 'live' };
