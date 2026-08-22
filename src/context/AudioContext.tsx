@@ -53,7 +53,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const [nextTrack, setNextTrack] = useState<{ title: string; time: string } | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const playedJingleForHour = useRef<number>(-1);
+  const playedJingleForHour = useRef<string>('');
   const isJinglePlayingRef = useRef<boolean>(false);
   
   // Store the last fetched block so we can resume it after jingle
@@ -74,20 +74,31 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       if (!data.isLive && data.dhakaTime) {
         const { hour, minute } = data.dhakaTime;
         
-        // Exact top of the hour (minute 0) and we haven't played a jingle for this hour yet
-        if (minute === 0 && JINGLE_HOURS.includes(hour) && playedJingleForHour.current !== hour) {
-          playedJingleForHour.current = hour;
+        let shouldPlayJingle = false;
+        let jingleToPlay = '';
+        const jingleId = `${hour}-${minute}`; // Unique ID for this hour+minute
+
+        // 1. 12am, 1am, 2am -> Top of the hour (minute 0)
+        if ((hour === 0 || hour === 1 || hour === 2) && minute === 0) {
+          shouldPlayJingle = true;
+          jingleToPlay = '/audio/jingle/T_Double_H_FM_lofi.mp3';
+        }
+        // 2. 7am, 8am -> At minute 15
+        else if ((hour === 7 || hour === 8) && minute === 15) {
+          shouldPlayJingle = true;
+          jingleToPlay = '/audio/jingle/7am_8am_নতুন_সকাল.mp3';
+        }
+        // 3. Other hours (9am to 11pm, plus 3am, 4am) -> Top of the hour (minute 0)
+        else if (minute === 0 && ![0, 1, 2, 7, 8].includes(hour)) {
+          shouldPlayJingle = true;
+          jingleToPlay = GENERIC_JINGLES[Math.floor(Math.random() * GENERIC_JINGLES.length)];
+        }
+        
+        // Execute jingle if matched and not already played
+        if (shouldPlayJingle && playedJingleForHour.current !== jingleId) {
+          playedJingleForHour.current = jingleId as any;
           isJinglePlayingRef.current = true;
           lastFetchedBlock.current = data.block; // Save schedule for when jingle finishes
-          
-          let jingleToPlay = '';
-          if (hour === 7 || hour === 8) {
-            jingleToPlay = '/audio/jingle/7am_8am_নতুন_সকাল.mp3';
-          } else if (hour === 1 || hour === 2) {
-            jingleToPlay = '/audio/jingle/T_Double_H_FM_lofi.mp3';
-          } else {
-            jingleToPlay = GENERIC_JINGLES[Math.floor(Math.random() * GENERIC_JINGLES.length)];
-          }
           
           setAudioMode('jingle');
           setCurrentTrack({

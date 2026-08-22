@@ -87,15 +87,6 @@ export async function GET() {
   // Helper time converters
   const time = (h: number, m: number) => h * 60 + m;
 
-  // Jingle Logic Check
-  const isJingleTime = () => {
-    // 7:15, 8:15, 9:00, 10:00, 11:00
-    if (hour === 7 && minute === 15) return true;
-    if (hour === 8 && minute === 15) return true;
-    if (hour >= 9 && hour <= 11 && minute === 0) return true;
-    return false;
-  };
-
   // Helper function to resolve schedule blocks
   function getSchedule(mins: number): { block: ScheduleBlock | null, nextTitle: string, nextTime: string } {
     
@@ -145,9 +136,7 @@ export async function GET() {
     else if (mins >= time(7, 0) && mins < time(12, 1)) {
       let b: ScheduleBlock;
 
-      if (isJingleTime()) {
-        b = { url: '/audio/jingle.mp3', title: 'Morning Sun', artist: 'T Double H FM', mode: 'live' };
-      } else if ((mins >= time(7, 0) && mins < time(7, 15)) || (mins >= time(8, 0) && mins < time(8, 15))) {
+      if ((mins >= time(7, 0) && mins < time(7, 15)) || (mins >= time(8, 0) && mins < time(8, 15))) {
         // BBC News at 7:00-7:15 and 8:00-8:15
         b = { url: secureLink('https://stream.live.vc.bbcmedia.co.uk/bbc_world_service'), title: 'BBC News', artist: 'BBC World Service', mode: 'live' };
       } else {
