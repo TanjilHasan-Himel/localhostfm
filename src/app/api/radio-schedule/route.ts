@@ -110,10 +110,10 @@ export async function GET() {
         nextTitle: '3rd Night Hour', nextTime: '2:01 AM'
       };
     }
-    // 2:01 AM - 3:00 AM: 3rd Night Hour (Repeat of 12:01 AM)
+    // 2:01 AM - 3:00 AM: 3rd Night Hour (90s / Modern Hindi)
     else if (mins >= time(2, 1) && mins < time(3, 1)) {
       return {
-        block: { url: secureLink(pickHindi.url), title: '3rd Night Hour', artist: pickHindi.name, mode: 'live' },
+        block: { url: secureLink('https://stream.zeno.fm/jmi0hwxrgmauv'), title: '3rd Night Hour', artist: '90s & Modern Hindi', mode: 'live' },
         nextTitle: 'Night OWL', nextTime: '3:01 AM'
       };
     }
