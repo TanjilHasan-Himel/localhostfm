@@ -20,7 +20,7 @@ export default function GlobalPlayer() {
         {/* Track Info */}
         <div className="flex items-center gap-4 flex-1 overflow-hidden">
           <div className="w-12 h-12 md:w-14 md:h-14 rounded-md overflow-hidden bg-white/10 flex-shrink-0 shadow-md">
-            <img src={currentTrack.cover} alt="Cover" className="w-full h-full object-cover" />
+            <img src="/musicplayer/vinly.png" alt="Cover" className="w-full h-full object-cover" />
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-white font-medium text-sm md:text-base truncate">{currentTrack.title}</span>
