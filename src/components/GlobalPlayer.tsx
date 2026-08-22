@@ -19,9 +19,9 @@ export default function GlobalPlayer() {
         
         {/* Track Info */}
         <div className="flex items-center gap-3 md:gap-4 flex-1 overflow-hidden">
-          <div className={`relative w-12 h-12 md:w-14 md:h-14 flex-shrink-0 rounded-full shadow-[0_0_12px_rgba(0,0,0,0.6)] ${isPlaying ? 'animate-[spin_3s_linear_infinite]' : 'transition-transform duration-500'}`}>
+          <div className={`relative w-12 h-12 md:w-14 md:h-14 flex-shrink-0 rounded-full overflow-hidden shadow-[0_0_12px_rgba(0,0,0,0.6)] ${isPlaying ? 'animate-[spin_3s_linear_infinite]' : 'transition-transform duration-500'}`}>
             {/* The Real Vinyl Image */}
-            <img src="/musicplayer/vinly.png" alt="Vinyl" className="absolute inset-0 w-full h-full object-cover rounded-full" />
+            <img src="/musicplayer/vinly.png" alt="Vinyl" className="absolute inset-0 w-full h-full object-cover" />
             
             {/* The Album Cover in the center */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35%] h-[35%] rounded-full overflow-hidden opacity-90">
