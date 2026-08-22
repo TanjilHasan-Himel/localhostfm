@@ -37,8 +37,6 @@ const secureLink = (url: string) => {
   return url;
 };
 
-export const dynamic = 'force-dynamic';
-
 export async function GET() {
   const streamUrl = process.env.STREAM_URL;
 
