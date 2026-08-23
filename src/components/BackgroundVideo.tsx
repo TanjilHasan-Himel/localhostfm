@@ -5,8 +5,22 @@ import Image from 'next/image';
 
 export default function BackgroundVideo() {
   const [isDay, setIsDay] = useState<boolean | null>(null);
+  const [isLowSpec, setIsLowSpec] = useState<boolean>(false);
 
   useEffect(() => {
+    // Detect low-end device or slow network
+    if (typeof window !== 'undefined') {
+      const connection = (navigator as any).connection;
+      const isSlowNetwork = connection && (connection.saveData || connection.effectiveType?.includes('2g') || connection.effectiveType === '3g');
+      const isLowMemory = (navigator as any).deviceMemory && (navigator as any).deviceMemory <= 4;
+      const isLowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+      
+      if (isSlowNetwork || isLowMemory || isLowCores) {
+        setIsLowSpec(true);
+        document.documentElement.classList.add('low-spec-mode');
+      }
+    }
+
     // Function to calculate and set the background based on Dhaka time
     const updateTheme = () => {
       const now = new Date();
@@ -49,12 +63,21 @@ export default function BackgroundVideo() {
         />
       </div>
 
-      {/* PC/LAPTOP BACKGROUND (Image for day, Video for night) */}
+      {/* PC/LAPTOP BACKGROUND (Image for day, Video for night - unless low spec) */}
       <div className="fixed top-0 left-0 w-full h-full -z-10 hidden md:block bg-black/90">
         {isDay ? (
           <Image 
             src="/bg_images/laptop and pc/bg_day_pc.jpg"
             alt="PC Day Background"
+            fill
+            quality={80}
+            priority
+            className="object-cover"
+          />
+        ) : isLowSpec ? (
+          <Image 
+            src="/bg_images/laptop and pc/bg_night_pc.jpg"
+            alt="PC Night Background"
             fill
             quality={80}
             priority

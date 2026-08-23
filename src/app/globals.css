@@ -89,3 +89,16 @@ body {
     animation: none !important;
   }
 }
+
+/* Disable heavy effects on PC if low-spec mode is detected */
+:root.low-spec-mode .animate-rhythm, 
+:root.low-spec-mode .animate-float-1, 
+:root.low-spec-mode .animate-float-2, 
+:root.low-spec-mode .animate-air-wave {
+  animation: none !important;
+}
+
+:root.low-spec-mode .glass {
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  backdrop-filter: none !important;
+}
