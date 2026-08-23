@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function BackgroundVideo() {
-  const [videoSrc, setVideoSrc] = useState<string>('');
+  const [isDay, setIsDay] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Function to calculate and set the video based on Dhaka time
-    const updateVideo = () => {
+    // Function to calculate and set the background based on Dhaka time
+    const updateTheme = () => {
       const now = new Date();
       const dhakaTimeStr = now.toLocaleString("en-US", { timeZone: "Asia/Dhaka" });
       const dhakaNow = new Date(dhakaTimeStr);
@@ -16,32 +17,60 @@ export default function BackgroundVideo() {
       const minute = dhakaNow.getMinutes();
       const timeInMinutes = hour * 60 + minute;
 
-      // 6:01 AM (6 * 60 + 1 = 361) to 6:59 PM (18 * 60 + 59 = 1139) -> bgv_1 (Day Theme)
-      // Otherwise -> bgv_2 (Night Theme)
+      // 6:01 AM (6 * 60 + 1 = 361) to 6:59 PM (18 * 60 + 59 = 1139) -> Day Theme
       if (timeInMinutes >= 361 && timeInMinutes <= 1139) {
-        setVideoSrc('/video/bgv_1.mp4');
+        setIsDay(true);
       } else {
-        setVideoSrc('/video/bgv_2.mp4');
+        setIsDay(false);
       }
     };
 
-    updateVideo();
+    updateTheme();
     
     // Check every minute if the background needs to change
-    const interval = setInterval(updateVideo, 60000);
+    const interval = setInterval(updateTheme, 60000);
     return () => clearInterval(interval);
   }, []);
 
-  if (!videoSrc) return null;
+  // Avoid hydration mismatch by not rendering anything until mounted
+  if (isDay === null) return <div className="fixed top-0 left-0 w-full h-full -z-10 bg-black/90"></div>;
 
   return (
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      className="fixed top-0 left-0 w-full h-full object-cover -z-10"
-      src={videoSrc}
-    />
+    <>
+      {/* MOBILE BACKGROUND (Image only, day or night) */}
+      <div className="fixed top-0 left-0 w-full h-full -z-10 block md:hidden bg-black/90">
+        <Image 
+          src={isDay ? "/bg_images/phone/bg_day_mobile.jpg" : "/bg_images/phone/bg_night_mobile.jpg"}
+          alt="Mobile Background"
+          fill
+          quality={70}
+          priority
+          className="object-cover"
+        />
+      </div>
+
+      {/* PC/LAPTOP BACKGROUND (Image for day, Video for night) */}
+      <div className="fixed top-0 left-0 w-full h-full -z-10 hidden md:block bg-black/90">
+        {isDay ? (
+          <Image 
+            src="/bg_images/laptop and pc/bg_day_pc.jpg"
+            alt="PC Day Background"
+            fill
+            quality={80}
+            priority
+            className="object-cover"
+          />
+        ) : (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+            src="/bg_video/bgv_1_night.mp4.mp4"
+          />
+        )}
+      </div>
+    </>
   );
 }

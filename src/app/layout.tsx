@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "T Double H FM",
     images: [
       {
-        url: "/bg.jpg",
+        url: "/bg_images/laptop and pc/bg_day_pc.jpg",
         width: 1200,
         height: 630,
         alt: "T Double H FM Cover",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "T Double H FM | Live 24/7 Radio",
     description: "Welcome to T Double H FM, curated by Tanjil Hasan Himel.",
-    images: ["/bg.jpg"],
+    images: ["/bg_images/laptop and pc/bg_day_pc.jpg"],
   },
 };
 

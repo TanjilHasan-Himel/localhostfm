@@ -29,7 +29,7 @@ body {
 
 /* Custom utility class for Glassmorphism */
 @utility glass {
-  @apply bg-black/40 backdrop-blur-md;
+  @apply bg-black/80 md:bg-black/40 md:backdrop-blur-md;
 }
 
 @keyframes rhythm-glow {
@@ -81,4 +81,11 @@ body {
 
 .animate-air-wave {
   animation: air-wave 4s ease-in-out infinite;
+}
+
+/* Disable heavy animations on mobile for performance */
+@media (max-width: 768px) {
+  .animate-rhythm, .animate-float-1, .animate-float-2, .animate-air-wave {
+    animation: none !important;
+  }
 }

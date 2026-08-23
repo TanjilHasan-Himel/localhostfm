@@ -10,7 +10,7 @@ export async function GET() {
   const currentTrack = {
     title: 'Midnight Coding Sessions',
     artist: 'T Double H FM Chill',
-    cover: '/bg.jpg', // Using the background image as the dummy cover art
+    cover: '/bg_images/laptop and pc/bg_day_pc.jpg', // Using the background image as the dummy cover art
   };
 
   return NextResponse.json(currentTrack);

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useAudio } from '@/context/AudioContext';
+import Image from 'next/image';
 
 export default function GlobalPlayer() {
   const { isPlaying, togglePlay, volume, setVolume, currentTrack } = useAudio();
@@ -20,8 +21,14 @@ export default function GlobalPlayer() {
         {/* Track Info */}
         <div className="flex items-center gap-3 md:gap-4 flex-1 overflow-hidden">
           <div className={`relative w-14 h-14 md:w-16 md:h-16 flex-shrink-0 rounded-full overflow-hidden shadow-md ${isPlaying ? 'animate-[spin_8s_linear_infinite]' : 'transition-transform duration-500'}`}>
-            {/* The Pre-edited Vinyl Image */}
-            <img src="/vinly.png" alt="Vinyl" className="absolute inset-0 w-full h-full object-cover" />
+            {/* The Pre-edited Vinyl Image using Next.js Image for optimization */}
+            <Image 
+              src="/musicplayer/vinly.png" 
+              alt="Vinyl" 
+              width={64} 
+              height={64} 
+              className="absolute inset-0 w-full h-full object-cover" 
+            />
           </div>
           <div className="flex flex-col min-w-0 ml-1">
             <span className="text-white font-medium text-sm md:text-base truncate">{currentTrack.title}</span>

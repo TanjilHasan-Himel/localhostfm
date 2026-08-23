@@ -47,7 +47,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const [currentTrack, setCurrentTrack] = useState<TrackInfo>({
     title: 'Connecting...',
     artist: 'T Double H FM',
-    cover: '/bg.jpg',
+    cover: '/bg_images/laptop and pc/bg_day_pc.jpg',
   });
   
   const [nextTrack, setNextTrack] = useState<{ title: string; time: string } | null>(null);
@@ -104,7 +104,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
           setCurrentTrack({
             title: 'Station ID',
             artist: 'T Double H FM',
-            cover: '/bg.jpg'
+            cover: '/bg_images/laptop and pc/bg_day_pc.jpg'
           });
           
           if (audioRef.current) {
@@ -135,7 +135,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
           setCurrentTrack({
             title: 'Silence',
             artist: 'Quiet Time',
-            cover: '/bg.jpg'
+            cover: '/bg_images/laptop and pc/bg_day_pc.jpg'
           });
         }
         if (data.nextBlock) setNextTrack(data.nextBlock);
@@ -154,7 +154,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         setCurrentTrack({
           title: block.title,
           artist: block.artist,
-          cover: '/bg.jpg'
+          cover: '/bg_images/laptop and pc/bg_day_pc.jpg'
         });
 
         if (audioRef.current) {
@@ -184,7 +184,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         setCurrentTrack({
           title: block.title,
           artist: block.artist,
-          cover: '/bg.jpg'
+          cover: '/bg_images/laptop and pc/bg_day_pc.jpg'
         });
       }
 
@@ -206,7 +206,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         setCurrentTrack({
           title: block.title,
           artist: block.artist,
-          cover: '/bg.jpg'
+          cover: '/bg_images/laptop and pc/bg_day_pc.jpg'
         });
 
         if (audioRef.current) {
