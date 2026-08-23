@@ -13,7 +13,7 @@ interface ScheduleBlock {
 // Arrays for rotating links based on the day
 const hindiLinks = [
   { url: 'https://stream.zeno.fm/60ef4p33vxquv', name: 'Bollywood Classic Hours' },
-  { url: 'https://stream.zeno.fm/x6x79h2qkwzuv', name: 'Hindi Hits' }, // Replaced IP 192.99.8.192 with a stable Zeno FM Hindi stream to avoid 403
+  { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', name: 'Hindi Hits' }, // Replaced 404 stream with a working one
   { url: 'https://www.desizoneradio.com/relay1', name: 'DesiZone Radio' },
   { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', name: 'Global Hits & Bollywood' }
 ];
