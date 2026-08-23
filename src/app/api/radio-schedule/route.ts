@@ -12,20 +12,20 @@ interface ScheduleBlock {
 
 // Arrays for rotating links based on the day
 const hindiLinks = [
-  { url: 'http://node-12.zeno.fm/60ef4p33vxquv', name: 'Bollywood Classic Hours' },
-  { url: 'http://192.99.8.192:5032/', name: 'Hindi Hits' },
+  { url: 'https://stream.zeno.fm/60ef4p33vxquv', name: 'Bollywood Classic Hours' },
+  { url: 'https://stream.zeno.fm/x6x79h2qkwzuv', name: 'Hindi Hits' }, // Replaced IP 192.99.8.192 with a stable Zeno FM Hindi stream to avoid 403
   { url: 'https://www.desizoneradio.com/relay1', name: 'DesiZone Radio' },
   { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', name: 'Global Hits & Bollywood' }
 ];
 
 const englishLinks = [
-  { url: 'http://live.powerhitz.com/hitlist', name: 'PowerHitz Top 40' },
-  { url: 'http://listen.181fm.com/181-awesome80s_128k.mp3', name: 'Awesome 80s' },
+  { url: 'https://live.powerhitz.com/hitlist', name: 'PowerHitz Top 40' },
+  { url: 'https://listen.181fm.com/181-awesome80s_128k.mp3', name: 'Awesome 80s' },
   { url: 'https://ice1.somafm.com/poptron-128-mp3', name: 'PopTron' },
-  { url: 'http://listen.181fm.com/181-star90s_128k.mp3', name: 'Star 90s' },
-  { url: 'http://live.powerhitz.com/officemix', name: 'Office Mix' },
+  { url: 'https://listen.181fm.com/181-star90s_128k.mp3', name: 'Star 90s' },
+  { url: 'https://live.powerhitz.com/officemix', name: 'Office Mix' },
   { url: 'https://ice1.somafm.com/indiepop-128-mp3', name: 'Indie Pop' },
-  { url: 'http://listen.181fm.com/181-lite80s_128k.mp3', name: 'Lite 80s' }
+  { url: 'https://listen.181fm.com/181-lite80s_128k.mp3', name: 'Lite 80s' }
 ];
 
 // Helper to securely proxy links to avoid Mixed Content (HTTP on HTTPS)
