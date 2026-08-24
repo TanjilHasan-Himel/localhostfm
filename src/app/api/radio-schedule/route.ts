@@ -197,7 +197,7 @@ export async function GET() {
     else if (mins >= time(20, 31) && mins < time(22, 1)) {
       let b: ScheduleBlock;
       if (day !== 2 && day !== 3) { // Sat, Sun, Mon, Thu, Fri
-        b = { url: secureLink('https://stream.radiocaroline.net/'), title: 'Evening Tea Cup', artist: 'Radio Caroline', mode: 'live' };
+        b = { url: secureLink('https://stream.radiocaroline.net/;'), title: 'Evening Tea Cup', artist: 'Radio Caroline', mode: 'live' };
       } else {
         if (isWeekday) {
           b = { url: secureLink(pickEnglish.url), title: 'Evening Pop Culture', artist: pickEnglish.name, mode: 'live' };
