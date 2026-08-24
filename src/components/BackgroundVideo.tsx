@@ -63,27 +63,16 @@ export default function BackgroundVideo() {
         />
       </div>
 
-      {/* PC/LAPTOP BACKGROUND (Video normally, Image if low-spec) */}
+      {/* PC/LAPTOP BACKGROUND (Image only, day or night) */}
       <div className="fixed top-0 left-0 w-full h-full -z-10 hidden md:block bg-black/90">
-        {isLowSpec ? (
-          <Image 
-            src={isDay ? "/bg_images/laptop and pc/bg_day_pc.jpg" : "/bg_images/laptop and pc/bg_night_pc.jpg"}
-            alt="PC Background"
-            fill
-            quality={80}
-            priority
-            className="object-cover"
-          />
-        ) : (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-            src={isDay ? "/bg_video/bgv_1_day.mp4.mp4" : "/bg_video/bgv_1_night.mp4.mp4"}
-          />
-        )}
+        <Image 
+          src={isDay ? "/bg_images/laptop and pc/bg_day_pc.jpg" : "/bg_images/laptop and pc/bg_night_pc.jpg"}
+          alt="PC Background"
+          fill
+          quality={80}
+          priority
+          className="object-cover"
+        />
       </div>
     </>
   );
