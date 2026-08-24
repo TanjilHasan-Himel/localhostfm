@@ -88,8 +88,8 @@ export function AudioProvider({ children }: { children: ReactNode }) {
           shouldPlayJingle = true;
           jingleToPlay = '/audio/jingle/7am_8am_নতুন_সকাল.mp3';
         }
-        // 3. Other hours (9am to 11pm, plus 3am, 4am) -> Top of the hour (minute 0)
-        else if (minute === 0 && ![0, 1, 2, 7, 8].includes(hour)) {
+        // 3. Other hours (9am to 11pm, plus 3am, 4am) -> Top of the hour (minute 0) (excluding 5am, 6am)
+        else if (minute === 0 && ![0, 1, 2, 5, 6, 7, 8].includes(hour)) {
           shouldPlayJingle = true;
           jingleToPlay = GENERIC_JINGLES[Math.floor(Math.random() * GENERIC_JINGLES.length)];
         }
