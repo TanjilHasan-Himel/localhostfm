@@ -78,12 +78,12 @@ export function AudioProvider({ children }: { children: ReactNode }) {
           let jingleToPlay = '';
           const jingleId = `${hour}-${minute}`; // Unique ID for this hour+minute
   
-          // News Jingles Countdown (7:57, 7:58, 7:59 AM & PM)
-          if ((hour === 7 || hour === 19) && minute === 57) {
+          // News Jingles Countdown (7:57 AM, 7:58 PM, 7:59 PM)
+          if (hour === 7 && minute === 57) {
             shouldPlayJingle = true; jingleToPlay = '/audio/jingle/news_jingle/news_jingle_1_2.49sec.mp3';
-          } else if ((hour === 7 || hour === 19) && minute === 58) {
+          } else if (hour === 19 && minute === 58) {
             shouldPlayJingle = true; jingleToPlay = '/audio/jingle/news_jingle/news_jingle_2.mp3';
-          } else if ((hour === 7 || hour === 19) && minute === 59) {
+          } else if (hour === 19 && minute === 59) {
             shouldPlayJingle = true; jingleToPlay = '/audio/jingle/news_jingle/news_jingle_3.mp3';
           }
           // 1. 12am, 1am, 2am -> Top of the hour (minute 0)
