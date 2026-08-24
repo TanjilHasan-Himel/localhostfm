@@ -70,29 +70,37 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // Check for Top of the Hour Jingle
-      if (!data.isLive && data.dhakaTime) {
-        const { hour, minute } = data.dhakaTime;
-        
-        let shouldPlayJingle = false;
-        let jingleToPlay = '';
-        const jingleId = `${hour}-${minute}`; // Unique ID for this hour+minute
-
-        // 1. 12am, 1am, 2am -> Top of the hour (minute 0)
-        if ((hour === 0 || hour === 1 || hour === 2) && minute === 0) {
-          shouldPlayJingle = true;
-          jingleToPlay = '/audio/jingle/T_Double_H_FM_lofi.mp3';
-        }
-        // 2. 7am, 8am -> At minute 15
-        else if ((hour === 7 || hour === 8) && minute === 15) {
-          shouldPlayJingle = true;
-          jingleToPlay = '/audio/jingle/7am_8am_নতুন_সকাল.mp3';
-        }
-        // 3. Other hours (9am to 11pm, plus 3am, 4am) -> Top of the hour (minute 0) (excluding 5am, 6am)
-        else if (minute === 0 && ![0, 1, 2, 5, 6, 7, 8].includes(hour)) {
-          shouldPlayJingle = true;
-          jingleToPlay = GENERIC_JINGLES[Math.floor(Math.random() * GENERIC_JINGLES.length)];
-        }
+        // Check for Jingles
+        if (data.dhakaTime) {
+          const { hour, minute } = data.dhakaTime;
+          
+          let shouldPlayJingle = false;
+          let jingleToPlay = '';
+          const jingleId = `${hour}-${minute}`; // Unique ID for this hour+minute
+  
+          // News Jingles Countdown (7:57, 7:58, 7:59 AM & PM)
+          if ((hour === 7 || hour === 19) && minute === 57) {
+            shouldPlayJingle = true; jingleToPlay = '/audio/jingle/news_jingle/news_jingle_1_2.49sec.mp3';
+          } else if ((hour === 7 || hour === 19) && minute === 58) {
+            shouldPlayJingle = true; jingleToPlay = '/audio/jingle/news_jingle/news_jingle_2.mp3';
+          } else if ((hour === 7 || hour === 19) && minute === 59) {
+            shouldPlayJingle = true; jingleToPlay = '/audio/jingle/news_jingle/news_jingle_3.mp3';
+          }
+          // 1. 12am, 1am, 2am -> Top of the hour (minute 0)
+          else if (!data.isLive && (hour === 0 || hour === 1 || hour === 2) && minute === 0) {
+            shouldPlayJingle = true;
+            jingleToPlay = '/audio/jingle/T_Double_H_FM_lofi.mp3';
+          }
+          // 2. 7am, 8am -> At minute 15
+          else if (!data.isLive && (hour === 7 || hour === 8) && minute === 15) {
+            shouldPlayJingle = true;
+            jingleToPlay = '/audio/jingle/7am_8am_নতুন_সকাল.mp3';
+          }
+          // 3. Other hours (9am to 11pm, plus 3am, 4am) -> Top of the hour (minute 0) (excluding 5am, 6am, 7pm, 8pm)
+          else if (!data.isLive && minute === 0 && ![0, 1, 2, 5, 6, 7, 8, 19, 20].includes(hour)) {
+            shouldPlayJingle = true;
+            jingleToPlay = GENERIC_JINGLES[Math.floor(Math.random() * GENERIC_JINGLES.length)];
+          }
         
         // Execute jingle if matched and not already played
         if (shouldPlayJingle && playedJingleForHour.current !== jingleId) {
