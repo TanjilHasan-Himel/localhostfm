@@ -14,7 +14,7 @@ interface ScheduleBlock {
 const hindiLinks = [
   { url: 'https://stream.zeno.fm/60ef4p33vxquv', name: 'Bollywood Classic Hours' },
   { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', name: 'Hindi Hits' }, // Replaced 404 stream with a working one
-  { url: 'https://www.desizoneradio.com/relay1', name: 'DesiZone Radio' },
+  { url: 'https://radio.mellowbangla.com/stream', name: 'Mellow Bangla' },
   { url: 'https://stream.zeno.fm/jmi0hwxrgmauv', name: 'Global Hits & Bollywood' }
 ];
 
@@ -114,7 +114,7 @@ export async function GET() {
     else if (mins >= time(2, 1) && mins < time(3, 1)) {
       let b: ScheduleBlock;
       if (day === 1 || day === 3) { // Monday, Wednesday
-        b = { url: secureLink('https://noasrv.caster.fm:10182/stream'), title: '3rd Night Hour', artist: 'Bangla Hits', mode: 'live' };
+        b = { url: secureLink('https://radio.mellowbangla.com/stream'), title: '3rd Night Hour', artist: 'Mellow Bangla', mode: 'live' };
       } else {
         b = { url: secureLink('https://stream.zeno.fm/jmi0hwxrgmauv'), title: '3rd Night Hour', artist: '90s & Modern Hindi', mode: 'live' };
       }
@@ -213,7 +213,7 @@ export async function GET() {
       if (day === 6 || day === 3 || day === 4) { // Sat, Wed, Thu
         b = { url: secureLink('https://radio.mellowbangla.com/stream'), title: 'Night Musics', artist: 'Mellow Bangla', mode: 'live' };
       } else if (day === 1 || day === 0) { // Mon, Sun
-        b = { url: secureLink('https://noasrv.caster.fm:10182/stream'), title: 'Night Musics', artist: 'Bangla Hits', mode: 'live' };
+        b = { url: secureLink('https://radio.mellowbangla.com/stream'), title: 'Night Musics', artist: 'Mellow Bangla', mode: 'live' };
       } else if (day === 5) { // Friday
         b = { url: secureLink('https://stream.zeno.fm/jmi0hwxrgmauv'), title: 'Friday Night', artist: 'Global Hits & Bollywood', mode: 'live' };
       } else { // Tuesday
