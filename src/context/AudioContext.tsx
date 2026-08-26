@@ -231,7 +231,14 @@ export function AudioProvider({ children }: { children: ReactNode }) {
             audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
           }
 
-          audioRef.current.play().catch(console.error);
+          audioRef.current.play().catch(e => {
+            console.error("Resume play error:", e);
+            setLoading(false);
+            // Auto retry on play failure
+            setTimeout(() => {
+              if (isPlaying) syncSchedule(true);
+            }, 3000);
+          });
         }
       } else {
         // Safety fallback
@@ -249,6 +256,13 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const handleAudioError = () => {
     setLoading(false);
     console.warn("Audio stream error! Reconnecting in 3s...");
+    
+    // Prevent deadlock: if a jingle was playing and it errored, release the lock
+    if (isJinglePlayingRef.current) {
+      console.warn("Jingle encountered an error, releasing lock to resume normal schedule.");
+      isJinglePlayingRef.current = false;
+    }
+
     setTimeout(() => {
       if (isPlaying) syncSchedule(true);
     }, 3000);
