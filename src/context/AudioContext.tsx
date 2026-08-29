@@ -27,13 +27,7 @@ interface AudioContextType {
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 const JINGLE_HOURS = [0, 1, 2, 3, 4, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-const GENERIC_JINGLES = [
-  '/audio/jingle/Non_Stop_Drive.mp3',
-  '/audio/jingle/On_The_Air.mp3',
-  '/audio/jingle/T_Double_H.mp3',
-  '/audio/jingle/The_Music_Hub.mp3',
-  '/audio/jingle/মিউজিক_নন_স্টপ.mp3'
-];
+// Jingle arrays are defined directly in the logic below
 
 export function AudioProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -56,8 +50,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const playedJingleForHour = useRef<string>('');
   const isJinglePlayingRef = useRef<boolean>(false);
   
-  // Store the last fetched block so we can resume it after jingle
-  const lastFetchedBlock = useRef<any>(null);
+
 
   const syncSchedule = useCallback(async (forcePlay = false) => {
     try {
@@ -66,7 +59,6 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
       // If we are currently playing a jingle, DO NOT interrupt it!
       if (isJinglePlayingRef.current) {
-        lastFetchedBlock.current = data.block; // Save it for later
         return;
       }
 
@@ -78,35 +70,36 @@ export function AudioProvider({ children }: { children: ReactNode }) {
           let jingleToPlay = '';
           const jingleId = `${hour}-${minute}`; // Unique ID for this hour+minute
   
-          // News Jingles Countdown (7:57 AM, 7:58 PM, 7:59 PM)
+          // 1. News Jingle (7:57 AM only)
           if (hour === 7 && minute === 57) {
             shouldPlayJingle = true; jingleToPlay = '/audio/jingle/news_jingle/news_jingle_1_2.49sec.mp3';
-          } else if (hour === 19 && minute === 58) {
-            shouldPlayJingle = true; jingleToPlay = '/audio/jingle/news_jingle/news_jingle_2.mp3';
-          } else if (hour === 19 && minute === 59) {
-            shouldPlayJingle = true; jingleToPlay = '/audio/jingle/news_jingle/news_jingle_3.mp3';
-          }
-          // 1. 12am, 1am, 2am -> Top of the hour (minute 0)
-          else if (!data.isLive && (hour === 0 || hour === 1 || hour === 2) && minute === 0) {
-            shouldPlayJingle = true;
-            jingleToPlay = '/audio/jingle/T_Double_H_FM_lofi.mp3';
-          }
-          // 2. 7am, 8am -> At minute 15
-          else if (!data.isLive && (hour === 7 || hour === 8) && minute === 15) {
-            shouldPlayJingle = true;
-            jingleToPlay = '/audio/jingle/7am_8am_নতুন_সকাল.mp3';
-          }
-          // 3. Other hours (9am to 11pm, plus 3am, 4am) -> Top of the hour (minute 0) (excluding 5am, 6am, 7pm, 8pm)
-          else if (!data.isLive && minute === 0 && ![0, 1, 2, 5, 6, 7, 8, 19, 20].includes(hour)) {
-            shouldPlayJingle = true;
-            jingleToPlay = GENERIC_JINGLES[Math.floor(Math.random() * GENERIC_JINGLES.length)];
+          } 
+          // 2. All other jingles play at exactly minute 0 (Top of the hour)
+          else if (!data.isLive && minute === 0) {
+            if (hour === 0) {
+              // 12:00 AM (Midnight)
+              shouldPlayJingle = true; jingleToPlay = '/audio/jingle/T_Double_H_FM_lofi.mp3';
+            } else if ([1, 2, 3, 4].includes(hour)) {
+              // 1:00 AM, 2:00 AM, 3:00 AM, 4:00 AM
+              shouldPlayJingle = true; jingleToPlay = '/audio/jingle/Non_Stop_Drive.mp3';
+            } else if (hour === 7 || hour === 8) {
+              // 7:00 AM, 8:00 AM
+              shouldPlayJingle = true; jingleToPlay = '/audio/jingle/7am_8am_নতুন_সকাল.mp3';
+            } else if ([9, 10, 11].includes(hour)) {
+              // 9:00 AM, 10:00 AM, 11:00 AM (Rotate between 3 jingles)
+              shouldPlayJingle = true;
+              const morningJingles = ['/audio/jingle/On_The_Air.mp3', '/audio/jingle/The_Music_Hub.mp3', '/audio/jingle/T_Double_H.mp3'];
+              jingleToPlay = morningJingles[hour % 3]; 
+            } else if ([12, 13, 14, 15, 16, 17, 18, 21, 22, 23].includes(hour)) {
+              // 12 PM - 6 PM, and 9 PM - 11 PM
+              shouldPlayJingle = true; jingleToPlay = '/audio/jingle/মিউজিক_নন_স্টপ.mp3';
+            }
           }
         
         // Execute jingle if matched and not already played
         if (shouldPlayJingle && playedJingleForHour.current !== jingleId) {
           playedJingleForHour.current = jingleId as any;
           isJinglePlayingRef.current = true;
-          lastFetchedBlock.current = data.block; // Save schedule for when jingle finishes
           
           setAudioMode('jingle');
           setCurrentTrack({
@@ -207,43 +200,9 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       // Jingle is done!
       isJinglePlayingRef.current = false;
       
-      // Resume the scheduled block
-      if (lastFetchedBlock.current) {
-        const block = lastFetchedBlock.current;
-        setAudioMode(block.mode);
-        setCurrentTrack({
-          title: block.title,
-          artist: block.artist,
-          cover: '/bg_images/laptop and pc/bg_day_pc.jpg'
-        });
-
-        if (audioRef.current) {
-          setLoading(true);
-          audioRef.current.src = block.url;
-          audioRef.current.load();
-          
-          // Note: offset might be slightly inaccurate after jingle, but backend corrects it on next poll
-          if (block.mode === 'scheduled' && block.offset > 0) {
-            const handleLoadedMetadata = () => {
-              if (audioRef.current) audioRef.current.currentTime = block.offset;
-              audioRef.current?.removeEventListener('loadedmetadata', handleLoadedMetadata);
-            };
-            audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
-          }
-
-          audioRef.current.play().catch(e => {
-            console.error("Resume play error:", e);
-            setLoading(false);
-            // Auto retry on play failure
-            setTimeout(() => {
-              if (isPlaying) syncSchedule(true);
-            }, 3000);
-          });
-        }
-      } else {
-        // Safety fallback
-        syncSchedule(true);
-      }
+      // Immediately fetch and play the CURRENT live schedule!
+      // This prevents the old show from playing briefly after the jingle finishes.
+      syncSchedule(true);
     } else if (audioMode === 'live') {
       // Live stream dropped (e.g. Vercel proxy timeout). Auto-reconnect!
       console.warn("Live stream ended unexpectedly! Reconnecting...");
