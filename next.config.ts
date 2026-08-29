@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import withSerwistInit from "@serwist/next";
 
 const securityHeaders = [
   // Prevent clickjacking attacks
@@ -42,6 +43,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  turbopack: {},
   async headers() {
     return [
       {
@@ -53,4 +55,10 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withSerwist = withSerwistInit({
+  swSrc: "src/app/sw.ts",
+  swDest: "public/sw.js",
+  disable: process.env.NODE_ENV === "development",
+});
+
+export default withSerwist(nextConfig);

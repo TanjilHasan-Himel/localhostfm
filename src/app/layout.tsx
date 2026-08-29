@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,11 +12,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#000000",
+};
+
 export const metadata: Metadata = {
   title: "tdoubleh fm",
   description: "Welcome to T Double H FM, the ultimate live radio station curated by Tanjil Hasan Himel. Enjoy 24/7 lofi beats, morning routines, and live broadcasts.",
   authors: [{ name: "Tanjil Hasan Himel" }],
   keywords: ["radio", "T Double H FM", "lofi", "live stream", "Tanjil Hasan Himel", "music", "broadcast"],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "T Double H FM",
+  },
   openGraph: {
     title: "T Double H FM | Live 24/7 Radio",
     description: "Welcome to T Double H FM, the ultimate live radio station curated by Tanjil Hasan Himel. Enjoy 24/7 lofi beats, morning routines, and live broadcasts.",

@@ -152,8 +152,8 @@ export async function GET() {
     else if (mins >= time(7, 0) && mins < time(12, 1)) {
       let b: ScheduleBlock;
 
-      if ((mins >= time(7, 0) && mins < time(7, 15)) || (mins >= time(8, 0) && mins < time(8, 15))) {
-        // BBC News at 7:00-7:15 and 8:00-8:15
+      if ((mins >= time(7, 0) && mins < time(7, 15)) || (mins >= time(7, 59) && mins < time(8, 15))) {
+        // BBC News at 7:00-7:15 and 7:59-8:15
         b = { url: secureLink('https://stream.live.vc.bbcmedia.co.uk/bbc_world_service'), title: 'BBC News', artist: 'BBC World Service', mode: 'live' };
       } else {
         // Rotated Hits
@@ -179,15 +179,15 @@ export async function GET() {
       }
       return { block: b, nextTitle: 'Global Sports Hour', nextTime: '6:01 PM' };
     }
-    // 6:01 PM - 8:00 PM: Global Sports Hour
-    else if (mins >= time(18, 1) && mins < time(20, 0)) {
+    // 6:01 PM - 7:59 PM: Global Sports Hour
+    else if (mins >= time(18, 1) && mins < time(19, 59)) {
       return {
         block: { url: secureLink('https://radio.talksport.com/stream'), title: 'Global Sports Hour', artist: 'talkSPORT', mode: 'live' },
-        nextTitle: 'Prime Time News', nextTime: '8:00 PM'
+        nextTitle: 'Prime Time News', nextTime: '7:59 PM'
       };
     }
-    // 8:00 PM - 8:30 PM: Prime Time News
-    else if (mins >= time(20, 0) && mins < time(20, 31)) {
+    // 7:59 PM - 8:30 PM: Prime Time News
+    else if (mins >= time(19, 59) && mins < time(20, 31)) {
       return {
         block: { url: secureLink('https://stream.live.vc.bbcmedia.co.uk/bbc_world_service'), title: 'Prime Time News', artist: 'BBC World Service', mode: 'live' },
         nextTitle: 'Evening Pop Culture', nextTime: '8:31 PM'
