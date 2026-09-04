@@ -17,18 +17,33 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "tdoubleh fm",
-  description: "Welcome to T Double H FM, the ultimate live radio station curated by Tanjil Hasan Himel. Enjoy 24/7 lofi beats, morning routines, and live broadcasts.",
+  title: "T Double H FM | Live Radio Online by Tanjil Hasan Himel",
+  description: "Listen to T Double H FM, the best radio online curated by Tanjil Hasan Himel. Enjoy 24/7 live stream, BD radio, radio Bangladesh, and lofi beats. Your favorite online radio station.",
   authors: [{ name: "Tanjil Hasan Himel" }],
-  keywords: ["radio", "T Double H FM", "lofi", "live stream", "Tanjil Hasan Himel", "music", "broadcast"],
+  keywords: [
+    "radio", 
+    "Tanjil hasan Himel", 
+    "Tanjil Hasan Himel", 
+    "radio bangladesh", 
+    "radio online", 
+    "bd radio", 
+    "T Double H FM", 
+    "online radio", 
+    "live radio", 
+    "bangladesh radio", 
+    "lofi", 
+    "live stream", 
+    "music", 
+    "broadcast"
+  ],
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "T Double H FM",
   },
   openGraph: {
-    title: "T Double H FM | Live 24/7 Radio",
-    description: "Welcome to T Double H FM, the ultimate live radio station curated by Tanjil Hasan Himel. Enjoy 24/7 lofi beats, morning routines, and live broadcasts.",
+    title: "T Double H FM | BD Radio & Radio Online by Tanjil Hasan Himel",
+    description: "Listen to T Double H FM, the ultimate live radio online curated by Tanjil Hasan Himel. Experience the best BD radio and radio Bangladesh streams 24/7.",
     url: "https://tdoubleh.fm",
     siteName: "T Double H FM",
     images: [
@@ -36,7 +51,7 @@ export const metadata: Metadata = {
         url: "/bg_images/laptop and pc/bg_day_pc.jpg",
         width: 1200,
         height: 630,
-        alt: "T Double H FM Cover",
+        alt: "T Double H FM Cover - Tanjil Hasan Himel",
       },
     ],
     locale: "en_US",
@@ -44,9 +59,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "T Double H FM | Live 24/7 Radio",
-    description: "Welcome to T Double H FM, curated by Tanjil Hasan Himel.",
+    title: "T Double H FM | BD Radio & Radio Online by Tanjil Hasan Himel",
+    description: "Listen to T Double H FM, the ultimate live radio online curated by Tanjil Hasan Himel. Experience the best BD radio and radio Bangladesh streams 24/7.",
     images: ["/bg_images/laptop and pc/bg_day_pc.jpg"],
+  },
+  verification: {
+    google: "oN3On5ty2PkDCVH0lDfClKwoRWtfLoTYfzccC-DUqdA",
   },
 };
 
