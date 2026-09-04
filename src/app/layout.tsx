@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "T Double H FM | BD Radio & Radio Online by Tanjil Hasan Himel",
     description: "Listen to T Double H FM, the ultimate live radio online curated by Tanjil Hasan Himel. Experience the best BD radio and radio Bangladesh streams 24/7.",
-    url: "https://tdoubleh.fm",
+    url: "https://tdoublehfm.vercel.app",
     siteName: "T Double H FM",
     images: [
       {
